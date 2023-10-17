@@ -1,5 +1,5 @@
 public class EDI837PSegmentISA {
-    public static String generateISASegment(List<ElixirSuite__Claim__c> lstClaim,Organization objOrg){
+    public static String generateISASegment(){
         try{
             String ISA = 'ISA';
             ISA += '*' + EDIDataMappings.AuthInfoQualifier_1;

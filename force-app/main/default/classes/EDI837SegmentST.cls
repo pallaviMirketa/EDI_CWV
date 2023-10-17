@@ -5,6 +5,7 @@ public class EDI837SegmentST {
             ST += '*' + '837'; //HealthCare Claim
             ST += '*' + EDIDataMappings.Transactionsetcontrol_02;
             ST += '*' + EDIDataMappings.Implementation_Convention_Reference03;
+            ST += '~';
    
             return ST + '\n';
         }

@@ -6,7 +6,7 @@ public class EDI837PGSSegment {
         try{
             String GS = 'GS';
             GS += '*' +'HC';//CodeIdentifyingInformationType
-            GS += '*' + objOrg.Id; //SenderIdCode
+            GS += '*' + EDIDataMappings.applicationCode; //SenderIdCode
             GS += '*' + claim.ElixirSuite__Payor__r.Id; //receiverId
             GS += '*' + EDIDataUtils.formattedDate; //Date
             GS += '*' + EDIDataUtils.formattedTime; //Time
