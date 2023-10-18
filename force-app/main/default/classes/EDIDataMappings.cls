@@ -23,7 +23,6 @@ public class EDIDataMappings{
     public static final String Transactionsetcontrol_02 = '0001';
     public static final String Implementation_Convention_Reference03 = '005010X222A1';
     //NM1 Segment
-    
     public static final String EntityIdentifierCode = '44';
     public static final String EntityTypeQualifier = '2';
     //BHT Segment
@@ -44,14 +43,38 @@ public class EDIDataMappings{
     public static final String contactFunctionCode = 'IC';
     public static final String submitterContactName = 'Melvin Barry';
     public static final String communicationNumberQualifier = '2026732286';
+    //SBRHL Segment
+    public static final String HierarchicalParentIDNumber_02 = '1';
+    public static final String HierarchicalLevelCode_03 = '22';
+    public static final String HierarchicalChildCode_04 = '0';
+    //SBR Segment
+    public static String PayerResponsibilitySequenceNumberCode_01 = 'P';
+    public static String ClaimFilingIndicatorCode_09 = 'ZZ';
+     public static String getRelationshipCode(String input) {
+        switch on input  {
+            when 'Self'{ return '18'; }
+            when 'Spouse' {return '01';}
+            when 'Child' {return '19';}
+            when 'Employee' {return '20';}
+            when else { return '21'; }
+        }
+    }
     //CLM Segment
-    public static final String FacilityTypeCode = '11';
     public static final String FacilityCodeQualifier = 'B';
     public static final String ClaimFrequencyTypeCode = '1';
     public static final String ProviderorSupplierSignatureIndicator = 'Y';
     public static final String AssignmentorPlanParticipationCode = 'A';
     public static final String BenefitsAssignmentCertificationIndicator = 'Y';
     public static final String ReleaseofInformationCode = 'Y';
-
-    
+    //HI Segment
+    public static final String CodeListQualifierCode = 'ABK';
+    //GE Segment
+    public static final String numberofTransactionSetsIncluded = '1';
+    public static final String groupControlNumber = '1';
+    //IEA Segment
+    public static final String numberofIncludedFunctionalGroups = '1';
+    public static final String interchangeControlNumber = '000000001';
+    //DMG Segment
+    public static final String dateTimePeriodFormatQualifier = 'D8';
+   
 }

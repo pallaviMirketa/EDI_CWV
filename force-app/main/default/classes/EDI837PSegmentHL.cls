@@ -7,7 +7,7 @@ public static String generateHLSegment(){
             HL += '*' + EDIDataMappings.hierarchicalLevelCode;
             HL += '*' + EDIDataMappings.hierarchicalChildCode;
             HL += '~';
-            return HL;
+            return HL + '\n';
         
        /* catch(exception e){
             ElixirSuite__Exception_Log__c objExp = new ElixirSuite__Exception_Log__c();

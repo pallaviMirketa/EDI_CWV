@@ -11,7 +11,7 @@ public class EDI837PSegmentISA {
             ISA += '*' + EDIDataMappings.ReceiverIDQualifier_7;
             ISA += '*' + EDIDataMappings.InterchangeReceiverID_8;
             ISA += '*' + EDIDataUtils.formattedDate; //Date
-            ISA += '*' + EDIDataUtils.formattedTime; //Time
+            ISA += '*' + EDIDataUtils.formattedTimeHHmm; //Time
             ISA += '*' + EDIDataMappings.InterchangeControlStandId_11;
             ISA += '*' + EDIDataMappings.InterchangeControlVersionNumber_12;
             ISA += '*' + EDIDataMappings.InterchangeControlNumber_13;

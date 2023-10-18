@@ -1,6 +1,8 @@
 global class EDI837PSendEmailBatch implements Database.Batchable<sObject>,Schedulable {
     global Database.QueryLocator start(Database.BatchableContext context){
-        string query = 'SELECT Id,ElixirSuite__Payor__r.Id From ElixirSuite__Claim__c where ElixirSuite__Claim_Status__c = \'Ready to Submit\' and ElixirSuite__Payor__r.name = \'DBH Local\'';
+        string query = 'SELECT Id,Name,ElixirSuite__Total_Charge__c,ElixirSuite__Place_of_Service__c,ElixirSuite__Diagnosis_A__c,ElixirSuite__Diagnosis_B__c,';
+        query += 'ElixirSuite__Diagnosis_C__c, ElixirSuite__Diagnosis_D__c, ElixirSuite__Diagnosis_E__c ,ElixirSuite__Diagnosis_F__c,';
+        query += 'ElixirSuite__Diagnosis_G__c, ElixirSuite__Diagnosis_H__c,ElixirSuite__Payor__r.Id,ElixirSuite__Insured_Sex__c,ElixirSuite__Insured_DOB__c From ElixirSuite__Claim__c where ElixirSuite__Claim_Status__c = \'Ready to Submit\' and ElixirSuite__Payor__r.name = \'DBH Local\'';
         return Database.getQueryLocator(query);       
     }
     global void execute(Database.BatchableContext context, List<sObject> objectList) {
@@ -26,10 +28,12 @@ global class EDI837PSendEmailBatch implements Database.Batchable<sObject>,Schedu
         } else {
             System.debug('Error: ContentDocumentId not found for ContentVersion.');
         }
- 
+        
         Messaging.SingleEmailMessage email = new Messaging.SingleEmailMessage();
-        email.setToAddresses(new String[] {'ashutosh.singh@mirketa.com','vaishnavi.garg@mirketa.com','udhay.kumar@mirketa.com','pallavi.verma@mirketa.com','bhupati.sneha@mirketa.com','shashank.rajuks@mirketa.com'});
-		email.setSubject('EDI_837P File - Claims Ready for Submission');
+        email.setToAddresses(new String[] {'ashutosh.singh@mirketa.com','vaishnavi.garg@mirketa.com','udhay.kumar@mirketa.com','pallavi.verma@mirketa.com',
+            'bhupati.sneha@mirketa.com','shashank.rajuks@mirketa.com', 'aniruddha.malvi@mirketa.com', 'devang.tiwari@mirketa.com',
+            'anusha.reddy@mirketa.com'});
+        email.setSubject('EDI_837P File - Claims Ready for Submission');
         email.setPlainTextBody('Hi Team,\n\nPlease find the EDI_837P file in the attachments.\n\nRegards,\nHealth Care IT Team');
         // Create an attachment
         Messaging.EmailFileAttachment attachment = new Messaging.EmailFileAttachment();
@@ -39,8 +43,8 @@ global class EDI837PSendEmailBatch implements Database.Batchable<sObject>,Schedu
         attachment.setInline(false);
         email.setFileAttachments(new Messaging.EmailFileAttachment[] { attachment });
         // Send the email
-         Messaging.SendEmailResult[] result = Messaging.sendEmail(new Messaging.SingleEmailMessage[] { email });
-           
+        Messaging.SendEmailResult[] result = Messaging.sendEmail(new Messaging.SingleEmailMessage[] { email });
+        
     }
     global void finish(Database.BatchableContext context) {
         

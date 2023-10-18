@@ -2,11 +2,11 @@ public class EDI837PSegmentCLM {
     public static String generateCLMSegment(ElixirSuite__Claim__c objClaim){
         try{
             String CLM = 'CLM';
-            CLM += '*' + objClaim.Id;
-            CLM += '*' + objClaim.ElixirSuite__Total_Charge__c;
+            CLM += '*' + objClaim.Name;
+            CLM += '*' + EDIDataUtils.analyze(String.valueOf(objClaim.ElixirSuite__Total_Charge__c));
             CLM += '*';
             CLM += '*';
-            CLM += '*' + EDIDataMappings.FacilityTypeCode;
+            CLM += '*' + EDIDataUtils.analyze(objClaim.ElixirSuite__Place_of_Service__c);
             CLM += ':' + EDIDataMappings.FacilityCodeQualifier;
             CLM += ':' + EDIDataMappings.ClaimFrequencyTypeCode;
             CLM += '*' + EDIDataMappings.ProviderorSupplierSignatureIndicator;

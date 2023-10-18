@@ -9,7 +9,6 @@ public class EDI837PSegmentBHT {
             BHT += '*' + EDIDataUtils.formattedTime;
             BHT += '*' + EDIDataMappings.claimID;
             BHT += '~';
-            System.debug(BHT);
             return BHT + '\n';
         }
         catch(exception e){

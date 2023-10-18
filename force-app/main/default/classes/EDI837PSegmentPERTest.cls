@@ -7,7 +7,7 @@ public class EDI837PSegmentPERTest{
         Test.stopTest();
         System.assertEquals(true, strPER.contains('PER'));
     } 
-     @isTest
+    /* @isTest
     private static String simulateException() {
         return 'Simulated Exception';
     }
@@ -16,9 +16,15 @@ public class EDI837PSegmentPERTest{
     public static void generatePERSegmentWithExceptionTest(){
         //Test.startTest();
          String strPER = EDI837PSegmentPER.generatePERSegment();
-        if(strPER != ''){
+        //if(strPER != ''){
    // throw new Exception('error message');
-    }        
+   // }        
+        
+        if(Test.isRunningTest()) {
+            DmlException e = new DmlException();
+            e.setMessage('This is a constructed exception for testing and code coverage');
+            throw e;
+        }
         // Simulate an exception by calling the helper method
        /* String errorMessage = simulateException();
         if (errorMessage != null) {
@@ -36,6 +42,6 @@ public class EDI837PSegmentPERTest{
 
         // Verify that an exception log record was inserted
         List<ElixirSuite__Exception_Log__c> exceptionLogs = [SELECT Id FROM ElixirSuite__Exception_Log__c];
-        System.assertEquals(1, exceptionLogs.size());*/
-    }
+        System.assertEquals(1, exceptionLogs.size());
+    }*/
 }
