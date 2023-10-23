@@ -2,11 +2,17 @@ global class EDI837PSendEmailBatch implements Database.Batchable<sObject>,Schedu
     global Database.QueryLocator start(Database.BatchableContext context){
         string query = 'SELECT Id,Name,ElixirSuite__Total_Charge__c,ElixirSuite__Place_of_Service__c,ElixirSuite__Diagnosis_A__c,ElixirSuite__Diagnosis_B__c,';
         query += 'ElixirSuite__Diagnosis_C__c, ElixirSuite__Diagnosis_D__c, ElixirSuite__Diagnosis_E__c ,ElixirSuite__Diagnosis_F__c,';
-        query += 'ElixirSuite__Diagnosis_G__c, ElixirSuite__Diagnosis_H__c,ElixirSuite__Payor__r.Id,ElixirSuite__Insured_Sex__c,ElixirSuite__Insured_DOB__c From ElixirSuite__Claim__c where ElixirSuite__Claim_Status__c = \'Ready to Submit\' and ElixirSuite__Payor__r.name = \'DBH Local\'';
+        query += 'ElixirSuite__Diagnosis_G__c, ElixirSuite__Diagnosis_H__c,ElixirSuite__Payor__r.Id,ElixirSuite__Insured_Sex__c,ElixirSuite__Insured_DOB__c From ElixirSuite__Claim__c where ElixirSuite__Claim_Status__c = \'Ready to Submit\' and ElixirSuite__VOB_lookup__r.ElixirSuite__Payer__r.name = \'DBH Local\' order by CreatedDate desc';
         return Database.getQueryLocator(query);       
     }
     global void execute(Database.BatchableContext context, List<sObject> objectList) {
-        String EDI837P = EDI837PHandler.generateEDI837PMessage(objectList);
+        Set<Id> claimIds = new Set<Id>();
+        for(sObject s :objectList){
+            ElixirSuite__Claim__c claim = (ElixirSuite__Claim__c)s;
+            claimIds.add(claim.Id);
+        }
+        
+        String EDI837P = EDI837PHandler.generateEDI837PMessage(claimIds);
         
         ContentVersion cv = new ContentVersion();
         cv.Title = 'EDI_837P_' + Datetime.now().format('dd-MMM-yyyy');
@@ -30,9 +36,8 @@ global class EDI837PSendEmailBatch implements Database.Batchable<sObject>,Schedu
         }
         
         Messaging.SingleEmailMessage email = new Messaging.SingleEmailMessage();
-        email.setToAddresses(new String[] {'ashutosh.singh@mirketa.com','vaishnavi.garg@mirketa.com','udhay.kumar@mirketa.com','pallavi.verma@mirketa.com',
-            'bhupati.sneha@mirketa.com','shashank.rajuks@mirketa.com', 'aniruddha.malvi@mirketa.com', 'devang.tiwari@mirketa.com',
-            'anusha.reddy@mirketa.com'});
+        email.setToAddresses(new String[] {'pallavi.verma@mirketa.com',
+            'bhupati.sneha@mirketa.com'});
         email.setSubject('EDI_837P File - Claims Ready for Submission');
         email.setPlainTextBody('Hi Team,\n\nPlease find the EDI_837P file in the attachments.\n\nRegards,\nHealth Care IT Team');
         // Create an attachment
@@ -49,9 +54,14 @@ global class EDI837PSendEmailBatch implements Database.Batchable<sObject>,Schedu
     global void finish(Database.BatchableContext context) {
         
     }
+    public static void scheduleBatch() {
+        String cronExpression = '0 0 0,6,12,18 * * ?';    // Runs at midnight, 6 AM, 12 PM, and 6 PM every day
+        
+        // Schedule the job
+        System.schedule('EDI837PSendEmailBatchSchedule', cronExpression, new EDI837PSendEmailBatch());
+    }
     global void execute(SchedulableContext sc) { 
-        EDI837PSendEmailBatch batch = new EDI837PSendEmailBatch();
-        Database.executeBatch(batch);
+        scheduleBatch();
         
     }
 }

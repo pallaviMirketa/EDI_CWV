@@ -1,9 +1,9 @@
 public class EDI837PSegmentSBR {
-    public static String generateSBRSegment(ElixirSuite__VOB__c objInsurance){
+    public static String generateSBRSegment(){
         try{
             String SBR = 'SBR';
-            SBR += '*' + 'P'; //PayerResponsibilitySequenceNumberCode_01
-            SBR += '*' + EDIDataMappings.getRelationshipCode(objInsurance.ElixirSuite__Patient_Relationship_With_Insured__c);
+            SBR += '*' + EDIDataMappings.PayerResponsibilitySequenceNumberCode_01; //PayerResponsibilitySequenceNumberCode_01
+            SBR += '*' + EDIDataMappings.IndividualRelationshipCode_02;
             SBR += '*'; //Insured Group or Policy Number
             SBR += '******';
             SBR += EDIDataMappings.ClaimFilingIndicatorCode_09;

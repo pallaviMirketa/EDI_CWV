@@ -1,22 +1,31 @@
 public class EDIDataUtils {
     
-    public static final string formattedDate =  String.valueOf(DateTime.now().format('yyyyMMdd'));
     public static final string formattedTime =  String.valueOf(DateTime.now().format('HHmmss'));
     public static final string formattedTimeHHmm =  String.valueOf(DateTime.now().format('HHmm'));
     
-   public static string getDateTimeFormat(DateTime dt){
-        
+    public static string getDateTimeFormat(DateTime dt){
         String formattedDate = dt.format('yyyyMMdd');
         return formattedDate;
     }
-   public static String analyze(String fieldValue) {
+    public static String analyze(String fieldValue) {
         //1. Null Check
         if((fieldValue != null ? fieldValue : '' ) == '' ){
             return '';
-        }        
+        }
+        else if(fieldValue == 'A'){
+            return '1';
+        }
+        else if(fieldValue == 'B'){
+            return '2';
+        }
+        else if(fieldValue == 'C'){
+            return '3';
+        }else if(fieldValue == 'D'){
+            return '4';
+        }
         return fieldValue;
     }
-    public static List<ElixirSuite__Claim__c> getClaimInfo(List<String> lstClaimId ) {
+    public static List<ElixirSuite__Claim__c> getClaimInfo(set<id> claimId ) {
         try{
             List<ElixirSuite__Claim__c>  lstClaim = [SELECT Id, Name, ElixirSuite__Claim_Status__c,ElixirSuite__Payor__r.Id,ElixirSuite__Payor__c,
                                                      ElixirSuite__Payor__r.Name, ElixirSuite__Payor__r.ElixirSuite__Payer_Code__c, ElixirSuite__Insured_s_ID_Number__c, 
@@ -24,26 +33,31 @@ public class EDIDataUtils {
                                                      ElixirSuite__Insured_DOB__c, ElixirSuite__Insured_Sex__c,CreatedDate,ElixirSuite__Total_Paid__c,
                                                      ElixirSuite__Patient_Relationship_to_Insured__c, ElixirSuite__Diagnosis_A__c,ElixirSuite__Diagnosis_B__c,
                                                      ElixirSuite__Diagnosis_C__c, ElixirSuite__Diagnosis_D__c, ElixirSuite__Diagnosis_E__c ,ElixirSuite__Diagnosis_F__c,
-                                                     ElixirSuite__Diagnosis_G__c, ElixirSuite__Diagnosis_H__c,
+                                                     ElixirSuite__Diagnosis_G__c, ElixirSuite__Diagnosis_H__c,ElixirSuite__Total_Charge__c ,Rendering_Provider_First__c,
+                                                     Rendering_Provider_Middle__c, Rendering_Provider_Last__c, Rendering_Provider_ID__c,Rendering_Provider_NPI__c,
                                                      
-                                                     (select Id, ElixirSuite__From_Date_Of_Service__c, ElixirSuite__To_Date_Of_Service__c,
-                                                      ElixirSuite__Place_of_Service_Code_s__c, ElixirSuite__Procedure__r.Name,ElixirSuite__Procedure__r.ElixirSuite__Code_Description__c,
-                                                      ElixirSuite__Modifier_1__c, ElixirSuite__Modifier_2__c, ElixirSuite__Modifier_3__c, ElixirSuite__Modifier_4__c,
+                                                     ElixirSuite__VOB_lookup__r.ElixirSuite__Insured_Last_Name__c, ElixirSuite__VOB_lookup__r.ElixirSuite__Insured_First_Name__c,
+                                                     ElixirSuite__VOB_lookup__r.ElixirSuite__Insured_Middle_Name__c, ElixirSuite__VOB_lookup__r.ElixirSuite__Subscriber_Suffix__c,
+                                                     ElixirSuite__VOB_lookup__r.ElixirSuite__Insured_SSN__c, ElixirSuite__VOB_lookup__r.ElixirSuite__Insured_Address__c,
+                                                     ElixirSuite__VOB_lookup__r.ElixirSuite__Insured_City__c, ElixirSuite__VOB_lookup__r.ElixirSuite__Insured_State__c,
+                                                     ElixirSuite__VOB_lookup__r.ElixirSuite__Insured_Zipcode__c,ElixirSuite__VOB_lookup__r.ElixirSuite__Patient_Relationship_With_Insured__c,
+                                                     
+                                                     (select Id, ElixirSuite__From_Date_Of_Service__c, ElixirSuite__CPT_HCPCS_Code__c,
+                                                      ElixirSuite__Place_of_Service__c, ElixirSuite__Days_Units__c, ElixirSuite__Diagnosis_Pointer__c,
+                                                      ElixirSuite__Modifier_1__c, ElixirSuite__Modifier_2__c,
                                                       ElixirSuite__Procedure_Charge__c FROM ElixirSuite__Claim_Line_Items__r)
-                                                     FROM ElixirSuite__Claim__c WHERE Id IN: lstClaimId  WITH SECURITY_ENFORCED
-                                                     LIMIT 100];
-            System.debug('ElixirSuite__Payor__r : Data Utils'+ lstClaim[0].ElixirSuite__Payor__r.Id);
-            System.debug('ElixirSuite__Payor__r : Data Utils'+ lstClaim[0].Name);
-             System.debug('ElixirSuite__Payor__r : Data Utils'+ lstClaim[0].ElixirSuite__Diagnosis_A__c);
+                                                     FROM ElixirSuite__Claim__c WHERE Id IN: claimId  WITH SECURITY_ENFORCED
+                                                     ];
+            System.debug('ElixirSuite__Insured_First_Name__c' + lstClaim[0].ElixirSuite__VOB_lookup__r.ElixirSuite__Insured_First_Name__c );
             return lstClaim;
         }catch(Exception e) {
             ElixirSuite__Exception_Log__c objExp = new ElixirSuite__Exception_Log__c();
-            objExp.ElixirSuite__Stack_Trace_Long__c = 'EDI:No Claims found for this claim.'+  lstClaimId +  e.getMessage();
+            objExp.ElixirSuite__Stack_Trace_Long__c = 'EDI:Error in fetching data from Query .'+  e.getMessage();
             Insert objExp;
             return null;
         }  
     }
-    Public static Organization getOrganizationInfo(){
+    public static Organization getOrganizationInfo(){
         Organization objOrg = [SELECT Id, Name, Address, Phone, Fax FROM Organization];
         return objOrg;
     }
@@ -59,15 +73,5 @@ public class EDIDataUtils {
         ElixirSuite__Provider__c objProvider = [select Id,ElixirSuite__Provider_Taxonomy__c from ElixirSuite__Provider__c where  Name = 'COMMUNITY WELLNESS VENTURES, LLC' AND ElixirSuite__Provider_Taxonomy__c != null limit 1];
         return objProvider;
     } 
-    public static ElixirSuite__VOB__c getInsuranceInfo(){
-        ElixirSuite__VOB__c objInsurance = [SELECT Id, ElixirSuite__Insured_SSN__c, ElixirSuite__Insured_Last_Name__c, ElixirSuite__Insured_Middle_Name__c,
-                                            ElixirSuite__Insured_First_Name__c, ElixirSuite__Insured_City__c, ElixirSuite__Insured_Address__c,
-                                            ElixirSuite__Insured_State__c, ElixirSuite__Insured_Zipcode__c,ElixirSuite__Subscriber_Suffix__c,
-                                            ElixirSuite__Patient_Relationship_With_Insured__c
-                                            FROM ElixirSuite__VOB__c 
-                                            WITH SECURITY_ENFORCED
-                                            LIMIT 1];
-        return objInsurance;
-    }
     
 }

@@ -7,6 +7,7 @@ public class EDI837SegmentST {
             ST += '*' + EDIDataMappings.Implementation_Convention_Reference03;
             ST += '~';
    
+           System.debug('ST '+ ST);
             return ST + '\n';
         }
         catch(Exception e){

@@ -1,5 +1,5 @@
 public class EDI837PSegmentREF {
-    public static String generatePRVSegment(ElixirSuite__CMS_1500_Claim_Generation__c objCMS1500){
+    public static String generateREFSegment(ElixirSuite__CMS_1500_Claim_Generation__c objCMS1500){
         try{
             String REF = 'REF';
             REF += '*' + EDIDataMappings.referenceIdQualifierREF;

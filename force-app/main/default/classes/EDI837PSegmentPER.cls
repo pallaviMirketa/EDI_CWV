@@ -4,9 +4,10 @@ public class EDI837PSegmentPER {
         //formation of PER Segment
         try{
             String PER = 'PER';
-            PER += '*' + EDIDataMappings.contactFunctionCode;
-            PER += '*' + EDIDataMappings.submitterContactName;
-            PER += '*' + EDIDataMappings.communicationNumberQualifier;
+            PER += '*' + EDIDataMappings.contactFunctionCode_01;//101
+            PER += '*' + EDIDataMappings.ResponseContactName_02;//102
+            PER += '*' + EDIDataMappings.CommunicationNumberQualifier_03;
+            PER += '*' + EDIDataMappings.ResponseContactCommunicationNumber_04;
             PER += '~';
             
             return PER + '\n';

@@ -5,10 +5,11 @@ public class EDI837PSegmentBHT {
             BHT += '*' + EDIDataMappings.HierarchicalStructureCode;
             BHT += '*' + EDIDataMappings.transactionSetPurposeCode;
             BHT += '*' + EDIDataMappings.originatorApplicationTransactionID;
-            BHT += '*' + (DateTime.now().year() / 100) + EDIDataUtils.formattedDate;
+            BHT += '*' + EDIDataUtils.getDateTimeFormat(DateTime.now());
             BHT += '*' + EDIDataUtils.formattedTime;
             BHT += '*' + EDIDataMappings.claimID;
             BHT += '~';
+            System.debug('BHT '+BHT);
             return BHT + '\n';
         }
         catch(exception e){

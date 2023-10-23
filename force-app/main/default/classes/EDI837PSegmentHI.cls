@@ -3,7 +3,7 @@ public class EDI837PSegmentHI {
         try{
             String HI = 'HI';
             HI += '*' + EDIDataMappings.CodeListQualifierCode;
-            HI += ':' + objClaim.ElixirSuite__Diagnosis_A__c;
+            HI += ':' +  EDIDataUtils.analyze(objClaim.ElixirSuite__Diagnosis_A__c);
             if( objClaim.ElixirSuite__Diagnosis_B__c != null ){ HI += ':' + objClaim.ElixirSuite__Diagnosis_B__c; }
             if( objClaim.ElixirSuite__Diagnosis_C__c != null ){ HI += ':' + objClaim.ElixirSuite__Diagnosis_C__c; }
             if( objClaim.ElixirSuite__Diagnosis_D__c != null ){ HI += ':' + objClaim.ElixirSuite__Diagnosis_D__c; }

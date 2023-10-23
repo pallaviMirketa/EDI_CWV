@@ -6,12 +6,13 @@ public class EDIDataMappings{
     public static final String SenderIDQualifier_5 = 'ZZ';
     public static final String ReceiverIDQualifier_7 = 'ZZ';
     public static final String InterchangeSenderID = '75225' + ' '.repeat(10);
-    public static final String InterchangeReceiverID_8 = '100000         ';
+    public static final String InterchangeReceiverID_8 = '100000'  + ' '.repeat(9);
     public static final String InterchangeControlStandId_11 = '>';
     public static final String InterchangeControlVersionNumber_12 = '00501';
     public static final String InterchangeControlNumber_13 = '000000001';
     public static final String AcknowledgementRequested_14 = '1';
-    public static final String UsageIndicator_15 = 'P';
+    public static final String UsageIndicator_15Producttion = 'P';
+    //public static final String UsageIndicator_15Test = 'T';
     public static final String ComponentElementSeparator_16 = ':';
     //GS Segment
     public static final String GroupControlNumber_6 = '1';
@@ -40,25 +41,18 @@ public class EDIDataMappings{
     //REF
     public static final String referenceIdQualifierREF = 'EI';
     //PER
-    public static final String contactFunctionCode = 'IC';
-    public static final String submitterContactName = 'Melvin Barry';
-    public static final String communicationNumberQualifier = '2026732286';
+    public static final String contactFunctionCode_01 = 'IC';
+    public static final String ResponseContactName_02 = 'Melvin Barry';
+    public static final String CommunicationNumberQualifier_03 = 'TE';
+    public static final String ResponseContactCommunicationNumber_04 = '2026732286';
     //SBRHL Segment
     public static final String HierarchicalParentIDNumber_02 = '1';
     public static final String HierarchicalLevelCode_03 = '22';
     public static final String HierarchicalChildCode_04 = '0';
     //SBR Segment
     public static String PayerResponsibilitySequenceNumberCode_01 = 'P';
+    public static String IndividualRelationshipCode_02 = '18';
     public static String ClaimFilingIndicatorCode_09 = 'ZZ';
-     public static String getRelationshipCode(String input) {
-        switch on input  {
-            when 'Self'{ return '18'; }
-            when 'Spouse' {return '01';}
-            when 'Child' {return '19';}
-            when 'Employee' {return '20';}
-            when else { return '21'; }
-        }
-    }
     //CLM Segment
     public static final String FacilityCodeQualifier = 'B';
     public static final String ClaimFrequencyTypeCode = '1';
@@ -68,9 +62,15 @@ public class EDIDataMappings{
     public static final String ReleaseofInformationCode = 'Y';
     //HI Segment
     public static final String CodeListQualifierCode = 'ABK';
-    //GE Segment
+    //SV1 Segment
+    public static final String ProductorServiceIDQualifier_01 = 'HC';
+    public static final String UnitorBasisforMeasurementCode_03 = 'UN';
+    
     public static final String numberofTransactionSetsIncluded = '1';
     public static final String groupControlNumber = '1';
+    //DTP Segment
+    public static final String DateTimeQualifier_01 = '472'; 
+    public static final String DateTimePeriodFormatQualifier_02 = 'D8';
     //IEA Segment
     public static final String numberofIncludedFunctionalGroups = '1';
     public static final String interchangeControlNumber = '000000001';

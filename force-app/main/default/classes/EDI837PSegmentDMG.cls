@@ -1,11 +1,12 @@
 public class EDI837PSegmentDMG {
-public static String generateDMGSegment(ElixirSuite__Claim__c objClaim){
+    public static String generateDMGSegment(ElixirSuite__Claim__c objClaim){
         try{
             String DMG = 'DMG';
             DMG += '*' + EDIDataMappings.dateTimePeriodFormatQualifier;
-            DMG += '*' + EDIDataUtils.getDateTimeFormat(objClaim.ElixirSuite__Insured_DOB__c);
-            DMG += '*' + objClaim.ElixirSuite__Insured_Sex__c;
+            DMG += '*' + EDIDataUtils.analyze(EDIDataUtils.getDateTimeFormat(objClaim.ElixirSuite__Insured_DOB__c));
+            DMG += '*' + EDIDataUtils.analyze(objClaim.ElixirSuite__Insured_Sex__c);
             DMG += '~';
+            System.debug('DMG '+DMG);
             return DMG + '\n';
         }
         catch(exception e){

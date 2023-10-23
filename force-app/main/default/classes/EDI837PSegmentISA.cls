@@ -2,24 +2,25 @@ public class EDI837PSegmentISA {
     public static String generateISASegment(){
         try{
             String ISA = 'ISA';
-            ISA += '*' + EDIDataMappings.AuthInfoQualifier_1;
-            ISA += '*' + ' '.repeat(10);
+            ISA += '*' + EDIDataMappings.AuthInfoQualifier_1;//ISA01
+            ISA += '*' + ' '.repeat(10);//ISA02
             ISA += '*' + EDIDataMappings.SecurityInfoQualifier_3;
             ISA += '*' + ' '.repeat(10);
             ISA += '*' + EDIDataMappings.SenderIDQualifier_5;
             ISA += '*' + EDIDataMappings.InterchangeSenderID;//75225
             ISA += '*' + EDIDataMappings.ReceiverIDQualifier_7;
             ISA += '*' + EDIDataMappings.InterchangeReceiverID_8;
-            ISA += '*' + EDIDataUtils.formattedDate; //Date
+            ISA += '*' + String.valueOf(DateTime.now().format('yyMMdd')); //Date
             ISA += '*' + EDIDataUtils.formattedTimeHHmm; //Time
             ISA += '*' + EDIDataMappings.InterchangeControlStandId_11;
             ISA += '*' + EDIDataMappings.InterchangeControlVersionNumber_12;
             ISA += '*' + EDIDataMappings.InterchangeControlNumber_13;
             ISA += '*' + EDIDataMappings.AcknowledgementRequested_14;
-            ISA += '*' + EDIDataMappings.UsageIndicator_15;
+            ISA += '*' + EDIDataMappings.UsageIndicator_15Producttion;
             ISA += '*' + EDIDataMappings.ComponentElementSeparator_16;
             ISA += '~' ;
             
+            System.debug('ISA '+ ISA );
             return ISA + '\n';
         }
         catch(Exception e){

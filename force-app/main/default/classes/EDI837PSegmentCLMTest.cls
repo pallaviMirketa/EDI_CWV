@@ -135,8 +135,16 @@ public class EDI837PSegmentCLMTest {
             );
             insert testClaim;
             
+             ElixirSuite__Claim_Line_Items__c claimLineItem = new ElixirSuite__Claim_Line_Items__c(
+                 ElixirSuite__Procedure__c = testProcedure.Id,
+                 ElixirSuite__ICD_Codes__c = testDiagnosis.Id,
+                 ElixirSuite__Place_of_Service__c = '11'
+             );
+            claimLineItem.ElixirSuite__Claim__c = testClaim.Id;
+            insert claimLineItem;
             Test.startTest();
-            String result = EDI837PSegmentCLM.generateCLMSegment(testClaim);
+            ElixirSuite__Claim__c objClaim = [Select Id,Name, ElixirSuite__Total_Charge__c,(Select ElixirSuite__Place_of_Service__c from ElixirSuite__Claim_Line_Items__r ) from ElixirSuite__Claim__c where Id=:testClaim.Id];
+            String result = EDI837PSegmentCLM.generateCLMSegment(objClaim);
             String result1 = EDI837PSegmentCLM.generateCLMSegment(null);
             Test.stopTest();
         }
