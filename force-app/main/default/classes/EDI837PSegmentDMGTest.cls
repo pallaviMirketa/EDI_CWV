@@ -1,5 +1,5 @@
-@isTest
-public class EDI837PSendEmailBatchTest {
+@istest
+public class EDI837PSegmentDMGTest {
     public static User createTestUser( String fName, String lName)
     {
         Profile pf = [SELECT Id FROM Profile WHERE Name = 'System Administrator'];
@@ -22,11 +22,11 @@ public class EDI837PSendEmailBatchTest {
         return testUser;
     }
     
-    @isTest
-    public static void sendEmailBatchStart(){
-        
-        User usr = EDI837PSendEmailBatchTest.createTestUser('Jake','Smith');
-        System.runAs(usr){
+    @istest
+    public static void setuptestData() {
+        User usr = EDI837PSegmentDMGTest.createTestUser('Jacob', 'Smith'); 
+        System.runAs(usr)
+        {
             Account testAccount = new Account(
                 Name = 'Martin Luther',
                 ElixirSuite__First_Name__c = 'Martin',
@@ -34,22 +34,9 @@ public class EDI837PSendEmailBatchTest {
                 ElixirSuite__Email_Id__c = 'Martinluther@gmail.com',
                 ElixirSuite__Gender__c = 'Male',
                 ElixirSuite__Current_Status_Of_Patient__c = 'Patients In Review',
-                ElixirSuite__Stage__c = 'Pre Admission',
-                ElixirSuite__DOB__c = Date.newInstance(1990, 8, 1),
-                Phone = '9988778899'
+                ElixirSuite__Stage__c = 'Pre Admission'
             );
             insert testAccount;
-            
-            ElixirSuite__CMS_1500_Claim_Generation__c billingProvider = new ElixirSuite__CMS_1500_Claim_Generation__c(
-                ElixirSuite__Billing_Provider_NPI__c = '1234567890',
-                ElixirSuite__Billing_Provider_Name__c = 'Test Provider',
-                ElixirSuite__Billing_Provider_Address__c = '123 Test St',
-                ElixirSuite__Billing_Provider_City__c = 'Test City',
-                ElixirSuite__Billing_Provider_State__c = 'CA',
-                ElixirSuite__Billing_Provider_Zipcode__c = '12345',
-                ElixirSuite__Federal_Tax_Id_Number__c = '987654321'
-            );
-            insert billingProvider;
             
             Id templateProviderRecordTypeId = Schema.SObjectType.ElixirSuite__Provider__c.getRecordTypeInfosByDeveloperName().get('Template_Provider').getRecordTypeId();
             
@@ -58,11 +45,20 @@ public class EDI837PSendEmailBatchTest {
                 RecordTypeId = templateProviderRecordTypeId,
                 User__c = usr.Id,
                 ElixirSuite__Account__c = testAccount.Id,
-                ElixirSuite__Provider_Code__c = '1275903700',
-                ElixirSuite__Provider_Taxonomy__c = '12759037XX'
+                ElixirSuite__Provider_Code__c = '1275903700'
                 
             );
             insert testProvider; 
+            
+            ElixirSuite__Provider__c testProvider1 = new ElixirSuite__Provider__c(
+                Name = 'Rizwan Malik',
+                RecordTypeId = templateProviderRecordTypeId,
+                User__c = usr.Id,
+                ElixirSuite__Account__c = testAccount.Id,
+                ElixirSuite__Provider_Code__c = '1568402609'
+                
+            );
+            insert testProvider1;
             
             Id templateDiagnosisRecordTypeId = Schema.SObjectType.ElixirSuite__ICD_Codes__c.getRecordTypeInfosByDeveloperName().get('Template_Diagnosis_Code').getRecordTypeId();
             ElixirSuite__ICD_Codes__c testDiagnosis = new ElixirSuite__ICD_Codes__c(
@@ -95,8 +91,8 @@ public class EDI837PSendEmailBatchTest {
             
             ElixirSuite__Payor__c testPayer = new ElixirSuite__Payor__c(
                 ElixirSuite__Procedure__c = testProcedure.id,
-                Name = 'DBH Local',
-                ElixirSuite__Payer_Code__c = 'DCMCD'
+                Name = 'Medicare Part B',
+                ElixirSuite__Payer_Code__c = '12202'
             );
             insert testPayer;
             
@@ -105,8 +101,7 @@ public class EDI837PSendEmailBatchTest {
                 ElixirSuite__Payer__c = testPayer.Id,
                 ElixirSuite__Status__c = 'Active',
                 ElixirSuite__Set_Default_VOB__c = 'Yes',
-                ElixirSuite__Member_Id__c = '1300123',
-                ElixirSuite__Patient_Relationship_With_Insured__c = 'Self'
+                ElixirSuite__Member_Id__c = '73001234000'
                 
             );
             insert testInsurance;
@@ -116,10 +111,10 @@ public class EDI837PSendEmailBatchTest {
                 Supervising_Provider__c = testProvider.Id,
                 ElixirSuite__Visit_Start__c = DateTime.now(),
                 ElixirSuite__Visit_End__c = DateTime.now().addMinutes(15),
-                ElixirSuite__Status__c = 'Closed',
+                ElixirSuite__Status__c = 'Active',
                 Encounter_Type__c = 'Diagnostic Assessment',
                 Diagnosis__c = testDiagnosis.Id,
-                Service_Type__c = 'MHRS - DIAGNOSTIC ASSESSMENT',
+                Service_Type__c = 'MCO - DIAGNOSTIC ASSESSMENT',
                 PatientProcedureIDs__c = testProcedure.Id,
                 Service_Location__c = 'Residential Substance Abuse Treatment Facility – 55'
             );
@@ -135,23 +130,18 @@ public class EDI837PSendEmailBatchTest {
             
             ElixirSuite__Claim__c testClaim = new ElixirSuite__Claim__c(
                 ElixirSuite__Account__c = testAccount.Id,
-                Care_Episode__c = visit.Id,
+            	Care_Episode__c = visit.Id,
                 ElixirSuite__Payor__c = testPayer.Id,
-                ElixirSuite__Claim_Status__c = 'Ready to Submit',
-                EDI_Email_sent__c = False,
-                ElixirSuite__VOB_lookup__c = testInsurance.Id
-            );
+                ElixirSuite__Insured_Sex__c = 'M',
+                ElixirSuite__Insured_DOB__c = Date.newInstance(2023, 10, 26)           );
+                
             insert testClaim;
-            EDI_Recipient_Emails__c email = new EDI_Recipient_Emails__c(
-            	Recipient_Email_Ids__c = 'pallavi.verma@mirketa.com'
-            );
-            insert email;
             
             Test.startTest();
-            EDI837PSendEmailBatch job = new EDI837PSendEmailBatch();
-            Database.executeBatch(job);
-            Test.stopTest();  
+            String result = EDI837PSegmentDMG.generateDMGSegment(testClaim);
+            String result1 = EDI837PSegmentDMG.generateDMGSegment(null);
+            Test.stopTest();
         }
+        
     }
-    
 }

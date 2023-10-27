@@ -6,7 +6,6 @@ public class EDI837PSegmentPRV {
             PRV += '*' + EDIDataMappings.referenceIdentificationQualifier;
             PRV += '*' + EDIDataUtils.analyze(objProvider.ElixirSuite__Provider_Taxonomy__c);
             PRV += '~' ;
-            System.debug(PRV);
             return PRV + '\n';
         }
         catch(exception e){

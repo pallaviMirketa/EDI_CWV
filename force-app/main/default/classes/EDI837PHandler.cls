@@ -5,12 +5,11 @@ public class EDI837PHandler {
         ElixirSuite__Provider__c objProvider = EDIDataUtils.getProviderInfo();
         ElixirSuite__CMS_1500_Claim_Generation__c objProviderMetaData = EDIDataUtils.getBillingProviderData();
         Map<String,String> NM1N3N4Data = EDI837PSegmentNM1N3N4.generateNM1N3N4Segment(objOrgData, objProviderMetaData, claimList[0]);
-        System.debug('NM1N3N4Data '+ NM1N3N4Data);
         String EDI837P = '';
         try{
             //Generate ISA,GS,ST and BHT segments before loop.
             EDI837P += EDI837PSegmentISA.generateISASegment();
-            EDI837P += EDI837PGSSegment.generateGSSegment(claimList[0],objOrgData);//doubt only 1 claim as outside loop
+            EDI837P += EDI837PGSSegment.generateGSSegment();
             EDI837P += EDI837SegmentST.generateSTSegment();
             EDI837P += EDI837PSegmentBHT.generateBHTSegment();
             EDI837P += NM1N3N4Data.get('41');
@@ -42,24 +41,14 @@ public class EDI837PHandler {
             
             EDI837P += EDI837PSegmentSE.generatSESegment(segmentCount);
             EDI837P += EDI837PSegmentGEIEA.genrateGEAndIEASegments();
-            System.debug('EDI837P ' + EDI837P);
-            ElixirSuite__Exception_Log__c objExp = new ElixirSuite__Exception_Log__c();
-            objExp.ElixirSuite__Stack_Trace_Long__c = EDI837P;
-            Insert objExp;
-            
             return EDI837P;
+            
         } catch (Exception e) { 
             
             ElixirSuite__Exception_Log__c objExp = new ElixirSuite__Exception_Log__c();
-            objExp.ElixirSuite__Stack_Trace_Long__c = 'Exception occurred in EDI Handler Segment:'+ e.getMessage();
+            objExp.ElixirSuite__Stack_Trace_Long__c = 'Exception occurred in EDI generation:'+ e.getMessage();
             Insert objExp;
             return EDI837P;
         }
-    }
-    @future
-    public static void logException(String msg){
-        ElixirSuite__Exception_Log__c objExp = new ElixirSuite__Exception_Log__c();
-        objExp.ElixirSuite__Stack_Trace_Long__c = msg;
-        Insert objExp;
     }
 }

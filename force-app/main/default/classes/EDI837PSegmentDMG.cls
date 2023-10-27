@@ -6,7 +6,6 @@ public class EDI837PSegmentDMG {
             DMG += '*' + EDIDataUtils.analyze(EDIDataUtils.getDateTimeFormat(objClaim.ElixirSuite__Insured_DOB__c));
             DMG += '*' + EDIDataUtils.analyze(objClaim.ElixirSuite__Insured_Sex__c);
             DMG += '~';
-            System.debug('DMG '+DMG);
             return DMG + '\n';
         }
         catch(exception e){

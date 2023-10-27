@@ -7,8 +7,8 @@ public class EDI837PSegmentREFTest {
         );
         insert objcms;
 		test.starttest();
-        String refaSegment = EDI837PSegmentREF.generatePRVSegment(objcms);
-        String refaSegment1 = EDI837PSegmentREF.generatePRVSegment(null);
+        String refaSegment = EDI837PSegmentREF.generateREFSegment(objcms);
+        String refaSegment1 = EDI837PSegmentREF.generateREFSegment(null);
         test.stoptest();
         System.assertNotEquals(null, refaSegment);
     }

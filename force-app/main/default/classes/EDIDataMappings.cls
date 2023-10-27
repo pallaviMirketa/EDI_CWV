@@ -21,6 +21,8 @@ public class EDIDataMappings{
     public static final String applicationCode = '75225';
     public static final String applicationReceiverCode = '77033';
     //ST Segment
+    //healthCareClaim transactionSetIdentifierCode
+    public static final String transactionSetIdentifierCode_01 = '837';
     public static final String Transactionsetcontrol_02 = '0001';
     public static final String Implementation_Convention_Reference03 = '005010X222A1';
     //NM1 Segment

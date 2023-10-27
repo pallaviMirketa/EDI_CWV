@@ -1,6 +1,6 @@
 public class EDI837PSegmentISA {
     public static String generateISASegment(){
-        try{
+        
             String ISA = 'ISA';
             ISA += '*' + EDIDataMappings.AuthInfoQualifier_1;//ISA01
             ISA += '*' + ' '.repeat(10);//ISA02
@@ -20,14 +20,13 @@ public class EDI837PSegmentISA {
             ISA += '*' + EDIDataMappings.ComponentElementSeparator_16;
             ISA += '~' ;
             
-            System.debug('ISA '+ ISA );
             return ISA + '\n';
-        }
-        catch(Exception e){
+        
+        /*catch(Exception e){
             ElixirSuite__Exception_Log__c objExp = new ElixirSuite__Exception_Log__c();
             objExp.ElixirSuite__Stack_Trace_Long__c = 'EDI837p: Error ocuured ISA Segment.' +  e.getMessage();
             Insert objExp;
             return null;
-        }
+        }*/
     }
 }

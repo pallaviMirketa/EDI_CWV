@@ -25,11 +25,16 @@ public class EDI837PSegmentNM1N3N4 {
             String NM1Subscriber = EDI837PSegmentNM1N3N4.generateNM1Segment('IL','1',objClaim.ElixirSuite__VOB_lookup__r.ElixirSuite__Insured_Last_Name__c,
                                                                                 objClaim.ElixirSuite__VOB_lookup__r.ElixirSuite__Insured_First_name__c, '',
                                                                                 '','','MI','123456');//SSN
-            String N3Subscriber = EDI837PSegmentNM1N3N4.generateN3Segment(objClaim.ElixirSuite__VOB_lookup__r.ElixirSuite__Insured_Address__c);
-            String N4Subscriber = EDI837PSegmentNM1N3N4.generateN4Segment(objClaim.ElixirSuite__VOB_lookup__r.ElixirSuite__Insured_City__c,
+            String N3Subscriber = '';
+            String N4Subscriber = '';
+            if(objClaim.ElixirSuite__VOB_lookup__r.ElixirSuite__Insured_Address__c != null){
+                 N3Subscriber = EDI837PSegmentNM1N3N4.generateN3Segment(objClaim.ElixirSuite__VOB_lookup__r.ElixirSuite__Insured_Address__c);
+            }
+            if(objClaim.ElixirSuite__VOB_lookup__r.ElixirSuite__Insured_City__c != null){
+             N4Subscriber = EDI837PSegmentNM1N3N4.generateN4Segment(objClaim.ElixirSuite__VOB_lookup__r.ElixirSuite__Insured_City__c,
                                                                            objClaim.ElixirSuite__VOB_lookup__r.ElixirSuite__Insured_State__c,
-                                                                           String.Valueof(objClaim.ElixirSuite__VOB_lookup__r.ElixirSuite__Insured_Zipcode__c) );
-                
+                                                                           String.Valueof(objClaim.ElixirSuite__VOB_lookup__r.ElixirSuite__Insured_Zipcode__c));
+            } 
             NM1N3N4Data.put('IL', (NM1Subscriber + N3Subscriber + N4Subscriber));
             
             //Payor Details
@@ -37,14 +42,18 @@ public class EDI837PSegmentNM1N3N4 {
             NM1N3N4Data.put('PR', NM1Payor );
             
             //Rendering Provider Details
-            String RenderingProviderName = objClaim.Rendering_Provider_First__c + ' ' + objClaim.Rendering_Provider_Last__c;
-            String NM1RenderingProvider = EDI837PSegmentNM1N3N4.generateNM1Segment('82','1',RenderingProviderName,
-                                                                                  '','' ,'','','XX',
-                                                                                  objClaim.Rendering_Provider_NPI__c);
+              String NM1RenderingProvider = '';
+              String RenderingProviderName = EDIDataUtils.analyze(objClaim.Rendering_Provider_First__c) + ' ' + EDIDataUtils.analyze(objClaim.Rendering_Provider_Last__c);
+            if(objClaim.Rendering_Provider_First__c != null && objClaim.Rendering_Provider_Last__c != null){
+               NM1RenderingProvider = EDI837PSegmentNM1N3N4.generateNM1Segment('82','1',RenderingProviderName.trim(),
+                                                                                       '','' ,'','','XX',
+                                                                                       objClaim.Rendering_Provider_NPI__c);
+            }
             NM1N3N4Data.put('82', NM1RenderingProvider );
             
             System.debug('NM1N3N4Data '+ NM1N3N4Data);
-            return NM1N3N4Data;
+            return NM1N3N4Data; 
+            
         } 
         catch(exception e){
             ElixirSuite__Exception_Log__c objExp = new ElixirSuite__Exception_Log__c();

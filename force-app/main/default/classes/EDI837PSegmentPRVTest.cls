@@ -24,7 +24,7 @@ public class EDI837PSegmentPRVTest {
     
     @istest
     public static void setuptestData() {
-        User usr = EDI837PSegmentCLMTest.createTestUser('Jacob', 'Smith'); 
+        User usr = EDI837PSegmentPRVTest.createTestUser('Jacob', 'Smith'); 
         System.runAs(usr)
         {
             Account testAccount = new Account(
