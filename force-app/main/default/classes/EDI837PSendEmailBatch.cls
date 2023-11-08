@@ -1,8 +1,8 @@
-global class EDI837PSendEmailBatch implements Database.Batchable<sObject>{
+global class EDI837PSendEmailBatch implements Database.Batchable<sObject>, Schedulable{
     global Database.QueryLocator start(Database.BatchableContext context){
         string query = 'SELECT Id,Name,ElixirSuite__Total_Charge__c,ElixirSuite__Place_of_Service__c,ElixirSuite__Diagnosis_A__c,ElixirSuite__Diagnosis_B__c,';
-        query += 'ElixirSuite__Diagnosis_C__c, ElixirSuite__Diagnosis_D__c, ElixirSuite__Diagnosis_E__c ,ElixirSuite__Diagnosis_F__c,';
-        query += 'ElixirSuite__Diagnosis_G__c, ElixirSuite__Diagnosis_H__c,ElixirSuite__Payor__r.Id,ElixirSuite__Insured_Sex__c,ElixirSuite__Insured_DOB__c From ElixirSuite__Claim__c where ElixirSuite__Claim_Status__c = \'Ready to Submit\' and ElixirSuite__VOB_lookup__r.ElixirSuite__Payer__r.name = \'DBH Local\' and CreatedDate >= 2023-09-20T00:00:00Z  order by CreatedDate desc';
+        query += 'ElixirSuite__Diagnosis_C__c, ElixirSuite__Diagnosis_D__c, ElixirSuite__Diagnosis_E__c ,ElixirSuite__Diagnosis_F__c,EDI_Email_sent__c,';
+        query += 'ElixirSuite__Diagnosis_G__c, ElixirSuite__Diagnosis_H__c,ElixirSuite__Payor__r.Id,ElixirSuite__Insured_Sex__c,ElixirSuite__Insured_DOB__c From ElixirSuite__Claim__c where ElixirSuite__Payor__r.name = \'DBH Local\' and EDI_Email_sent__c = True  order by CreatedDate desc';
         return Database.getQueryLocator(query);       
     }
     global void execute(Database.BatchableContext context, List<sObject> objectList) {
@@ -19,7 +19,11 @@ global class EDI837PSendEmailBatch implements Database.Batchable<sObject>{
         cv.VersionData = Blob.valueOf(EDI837P);
         insert cv;
         
+        //--------------Insertion in data staging object-----------------------------//
         Data_Staging__c DataStaging = new Data_Staging__c();
+        DataStaging.Date__c= system.now();
+        DataStaging.Status__c = '837P EDI Received';
+        DataStaging.EDI_Type__c = 	'837P EDI';
         insert DataStaging;
         
         List<ContentVersion> cvList = [SELECT ContentDocumentId FROM ContentVersion WHERE Id = :cv.Id];
@@ -34,7 +38,7 @@ global class EDI837PSendEmailBatch implements Database.Batchable<sObject>{
             System.debug('Error: ContentDocumentId not found for ContentVersion.');
         }
         
-        //-----------Fetching the emails from custom settings
+        //-----------Fetching the emails from custom settings---------------------//
         EDI_Recipient_Emails__c emailAddress = EDI_Recipient_Emails__c.getInstance();
         
         if (emailAddress != null) {
@@ -42,18 +46,19 @@ global class EDI837PSendEmailBatch implements Database.Batchable<sObject>{
             if (toAddresses.size() > 0) {
                 Messaging.SingleEmailMessage email = new Messaging.SingleEmailMessage();
                 email.setToAddresses(toAddresses);
-                email.setSubject('EDI_837P File - Claims Ready for Submission');
+                email.setSenderDisplayName('Claim EDI');
+                email.setSubject('EDI_837P File');
                 email.setPlainTextBody('Hi Team,\n\nPlease find the EDI_837P file in the attachments.\n\nRegards,\nHealth Care IT Team');
-                //-----------Create an attachment
+                //-----------Create an attachment--------------------//
                 Messaging.EmailFileAttachment attachment = new Messaging.EmailFileAttachment();
                 attachment.setFileName(cv.Title + '.txt'); // Set the file name
                 attachment.setBody(cv.VersionData); // Set the attachment content
                 attachment.setContentType('text/csv');
                 attachment.setInline(false);
                 email.setFileAttachments(new Messaging.EmailFileAttachment[] { attachment });
-                //----------Send the email
+                //---------------Send the email-------------------//
                 Messaging.SendEmailResult[] result = Messaging.sendEmail(new Messaging.SingleEmailMessage[] { email });
-                /*if (result[0].isSuccess()){
+                if (result[0].isSuccess()){
                     List<ElixirSuite__Claim__c> claimToUpdateList = new List<ElixirSuite__Claim__c>();
                     for (Id claimId : claimIds) {
                         claimToUpdateList.add(new ElixirSuite__Claim__c(Id = claimId, EDI_Email_sent__c = true));
@@ -63,27 +68,35 @@ global class EDI837PSendEmailBatch implements Database.Batchable<sObject>{
                     }
                 }
                 else {
-                    System.debug('Error sending email: ' + result[0].getErrors()[0].getMessage());
-                }*/
+                    String emailError = 'Error sending email: '+ result[0].getErrors()[0].getMessage();
+                    ElixirSuite__Exception_Log__c objExp = new ElixirSuite__Exception_Log__c();
+                    objExp.ElixirSuite__Stack_Trace_Long__c = emailError;
+                }
                 
             } else {
-                System.debug('No email addresses found in custom settings.');
+                String emailAddressError = 'No email addresses found in custom settings.';
+                ElixirSuite__Exception_Log__c objExp = new ElixirSuite__Exception_Log__c();
+                objExp.ElixirSuite__Stack_Trace_Long__c = emailAddressError;
             }
         } else {
-            System.debug('Custom settings not found.');
+            String customSettingError = 'Custom settings not found. ';
+            ElixirSuite__Exception_Log__c objExp = new ElixirSuite__Exception_Log__c();
+            objExp.ElixirSuite__Stack_Trace_Long__c = customSettingError;
         }
         
     }
     global void finish(Database.BatchableContext context) {
         
     }
-    /*public static void scheduleBatch() {
-        String cronExpression = '0 0 0,6,12,18 * * ?';    // Runs at midnight, 6 AM, 12 PM, and 6 PM every day    
-        // Schedule the job
-        System.schedule('EDI837PSendEmailBatchSchedule', cronExpression, new EDI837PSendEmailBatch());
+    //----------Schedule the Batch class------------------//
+    public static void scheduleBatch() {
+        String cronExpression = '0 30 19 ? * FRI';    //  Every Friday at 7:30 PM    
+        //---------Schedule the job----------------//
+        System.schedule('EDI837PSendEmailBatchFile', cronExpression, new EDI837PSendEmailBatch());
     }
     global void execute(SchedulableContext sc) { 
-        scheduleBatch();
+        EDI837PSendEmailBatch batch = new EDI837PSendEmailBatch();
+        Database.executeBatch(batch);
         
-    }*/
+    }
 }

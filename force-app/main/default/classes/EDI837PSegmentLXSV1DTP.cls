@@ -23,7 +23,7 @@ public class EDI837PSegmentLXSV1DTP{
                 SV1 += '*' + EDIDataUtils.analyze(String.valueOf(objClaimlineItem.ElixirSuite__Days_Units__c)); //104
                 SV1 += '*' + EDIDataUtils.analyze(String.valueOf(objClaimlineItem.ElixirSuite__Place_of_Service__c)); //105
                 SV1 += '*'; //106 - no data
-                SV1 += '*' + EDIDataUtils.analyze(objClaimlineItem.ElixirSuite__Diagnosis_Pointer__c); //107
+                SV1 += '*' + EDIDataUtils.getModifiers(objClaimlineItem.ElixirSuite__Diagnosis_Pointer__c); //107
                 SV1 += '*';
                 SV1 += '~';
                 String DTP = 'DTP';

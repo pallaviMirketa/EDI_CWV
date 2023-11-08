@@ -37,10 +37,13 @@ public class EDI837PHandler {
                 NM1N3N4Data.clear();
             }
             
-            Integer segmentCount = EDI837P.split('\n',-1).size() - 1;
+            Integer segmentCount = EDI837P.split('~').size() - 2;
             
             EDI837P += EDI837PSegmentSE.generatSESegment(segmentCount);
             EDI837P += EDI837PSegmentGEIEA.genrateGEAndIEASegments();
+            ElixirSuite__Exception_Log__c objExp = new ElixirSuite__Exception_Log__c();
+            objExp.ElixirSuite__Stack_Trace_Long__c = EDI837P;
+            Insert objExp;
             return EDI837P;
             
         } catch (Exception e) { 

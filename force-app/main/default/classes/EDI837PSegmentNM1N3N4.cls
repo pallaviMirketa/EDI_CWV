@@ -24,7 +24,7 @@ public class EDI837PSegmentNM1N3N4 {
             //Subscriber Details
             String NM1Subscriber = EDI837PSegmentNM1N3N4.generateNM1Segment('IL','1',objClaim.ElixirSuite__VOB_lookup__r.ElixirSuite__Insured_Last_Name__c,
                                                                                 objClaim.ElixirSuite__VOB_lookup__r.ElixirSuite__Insured_First_name__c, '',
-                                                                                '','','MI','123456');//SSN
+                                                                                '','','MI','999999999');//SSN
             String N3Subscriber = '';
             String N4Subscriber = '';
             if(objClaim.ElixirSuite__VOB_lookup__r.ElixirSuite__Insured_Address__c != null){
