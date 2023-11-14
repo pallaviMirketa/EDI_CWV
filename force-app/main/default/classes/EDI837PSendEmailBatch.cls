@@ -2,7 +2,7 @@ global class EDI837PSendEmailBatch implements Database.Batchable<sObject>, Sched
     global Database.QueryLocator start(Database.BatchableContext context){
         string query = 'SELECT Id,Name,ElixirSuite__Total_Charge__c,ElixirSuite__Place_of_Service__c,ElixirSuite__Diagnosis_A__c,ElixirSuite__Diagnosis_B__c,';
         query += 'ElixirSuite__Diagnosis_C__c, ElixirSuite__Diagnosis_D__c, ElixirSuite__Diagnosis_E__c ,ElixirSuite__Diagnosis_F__c,EDI_Email_sent__c,';
-        query += 'ElixirSuite__Diagnosis_G__c, ElixirSuite__Diagnosis_H__c,ElixirSuite__Payor__r.Id,ElixirSuite__Insured_Sex__c,ElixirSuite__Insured_DOB__c From ElixirSuite__Claim__c where ElixirSuite__Payor__r.name = \'DBH Local\' and EDI_Email_sent__c = True  order by CreatedDate desc';
+        query += 'ElixirSuite__Diagnosis_G__c, ElixirSuite__Diagnosis_H__c,ElixirSuite__Payor__r.Id,ElixirSuite__Insured_Sex__c,ElixirSuite__Insured_DOB__c From ElixirSuite__Claim__c where ElixirSuite__Payor__r.name = \'DBH Local\' and EDI_Email_sent__c = False  order by CreatedDate desc';
         return Database.getQueryLocator(query);       
     }
     global void execute(Database.BatchableContext context, List<sObject> objectList) {
