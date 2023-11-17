@@ -1,5 +1,5 @@
 public class EDI835DataMappings {
-   public static String getISACode(String isaValue) {
+    public static String getISACode(String isaValue) {
         switch on isaValue {
             when 'ZZ' {return 'Mutually Defined'; }
             when '01' { return 'DUNS (Dun & Bradstreet) Number'; }
@@ -31,33 +31,87 @@ public class EDI835DataMappings {
             when else { return 'Unknown Transaction Code'; }
         }
     }
-    public static String getNM1ContactCode(String value) {
+    public static String getNM1SegmentCodes(String value) {
         switch on value {
+            when '34' { return 'Social Security Number'; }
+            when 'MI' { return 'Member Identification Number'; }
+            when 'II' { return 'Employers Identification Number (EIN)'; }//
+            when 'XX' { return 'Health Maintenance Organization (HMO) Policy Number'; }
+            when 'MR' { return 'Medical Record Number'; }
+            when 'FI' { return 'Federal Taxpayers Identification Number'; }//
+            when 'PN' { return 'Pension Claim Number'; }
+            when 'SY' { return 'Social Security Number'; }
+            when '1W' { return 'Individual Relationship Identifier (IRI)'; }
+            when 'ZH' { return 'Unique Physician Identification Number (UPIN)'; }
+            when 'PQ' { return 'Payer Identification'; }
+            when 'QC' { return 'Patient'; }
+            when '82' { return 'Insured'; }
+            when '74' { return 'Corrected Patient or Insured'; }
             when 'PR' { return 'Payor'; }
             when 'PE' { return 'Payee'; }
+            when '1P' { return 'Person'; }
+            when '2P' { return 'Partnership'; }
+            when '3P' { return 'Corporation'; }
+            when '4P' { return 'Non-Person Entity'; }
+            when '6P' { return 'Government Agency'; }
+            when '71' { return 'Party'; }
+            when '72' { return 'Service Provider'; }
+            when '41' { return 'Name of the referring physician'; }
+            when 'FA' { return 'Facility'; }
+            when 'IL' { return 'Insured or Subscriber'; }
+            when 'TQ' { return 'Treatment Authorization Code'; }
             when else { return ''; }
         }
     }
     public static String getPaymentMethod(String paymentMethodCode) {
         switch on paymentMethodCode {
-            when 'C' { return 'Check'; }
-            when 'D' { return 'Electronic Funds Transfer (EFT)'; }
+            when 'C' { return 'adjustment or a credit'; }
+            when 'D' { return 'debit transaction'; }
             when 'H' { return 'Automated Clearing House (ACH) CCD+'; }
-            when 'I' { return 'Credit Card'; }
-            when 'R' { return 'Reserved for Future Use'; }
-            when 'W' { return 'Wire Transfer'; }
+            when 'I' { return 'Electronic funds transfer or similar transaction'; }
+            //when 'R' { return 'Reserved for Future Use'; }
+            //when 'W' { return 'Wire Transfer'; }
+            when 'P' {return 'payment is being made to the payee' ;}
             when else { return ''; }
         }
     }
-    public static String getFacilityTypeCode(String facilityTypeCode) {
+    public static String getTS3FacilityTypeCode(String code){
+        switch on code{
+            when '01' { return 'Hospital'; }
+            when '02' { return 'Professional office'; }
+            when '03' { return 'Home health agency'; }
+            when '04' { return 'Skilled nursing facility'; }
+            when '05' { return 'Residential care facility'; }
+            when '06' { return 'Outpatient clinic'; }
+            when '07' { return 'Ambulance service'; }
+            when '08' { return 'Laboratory'; }
+            when '09' { return 'Pharmacy'; }
+            when '10' { return 'Durable medical equipment provider'; }
+            when '11' { return 'Other healthcare provider'; }
+            when '96' { return 'Unknown or not specified'; }
+            when '97' { return 'Not applicable'; }
+            when '98' { return 'Foreign healthcare provider'; }
+            when '99' { return 'Healthcare provider not identified'; }
+            when else { return ''; }
+        }
+    }
+    public static String getCLPFacilityTypeCode(String facilityTypeCode) {
         switch on facilityTypeCode {
-            when '11' { return 'Hospital'; }
-            when '22' { return 'Clinic'; }
-            when '33' { return 'Nursing Home'; }
-            when '44' { return 'Home Health'; }
-            when '55' { return 'Hospice'; }
-            when '66' { return 'Ambulance'; }
-            when '77' { return 'Other'; }
+            when '01' { return 'Original Claim'; }
+            when '02' { return 'Amended Claim'; }
+            when '03' { return 'Void Claim'; }
+            when '04' { return 'Replacement Claim'; }
+            when '05' { return 'Resubmission Claim'; }
+            when '06' { return 'Supplemental Claim'; }
+            when '07' { return 'Reversal Claim'; }
+            when '08' { return 'Appeal Claim'; }
+            when '09' { return 'Duplicate Claim'; }
+            when '10' { return 'Information Only Claim'; }
+            when '11' { return 'Inquiry Claim'; }
+            when '12' { return 'Correction Claim'; }
+            when '13' { return 'Predetermination Claim'; }
+            when '14' { return 'Preauthorization Claim'; }
+            when '15' { return 'Post-Payment Adjustment Claim'; }
             when else { return ''; }
         }
     }
@@ -75,16 +129,15 @@ public class EDI835DataMappings {
     }
     public static String getClaimFrequencyCode(String claimFrequencyCode) {
         switch on claimFrequencyCode {
-            when '1' { return 'Original Claim'; }
-            when '7' { return 'Replacement of Prior Claim'; }
-            when '8' { return 'Void/Cancel of Prior Claim'; }
-            when '9' { return 'Final Adjustment (Adjudication)'; }
-            when 'A' { return 'Adjustment of Prior Claim'; }
-            when 'B' { return 'Rebilled Original Claim'; }
-            when 'C' { return 'Corrected Claim'; }
-            when 'D' { return 'Referral'; }
-            when 'E' { return 'Claim Reopened'; }
-            when 'F' { return 'Void/Cancel of Claim Reopened'; }
+            when '1' { return 'First claim for this service in this episode of care'; }
+            when '2' { return 'Subsequent claim for this service in this episode of care'; }
+            when '3' { return 'Last claim for this service in this episode of care'; }
+            when '4' { return 'Single claim for this service in this episode of care'; }
+            when '5' { return 'Claim for a new episode of care'; }
+            when '6' { return 'Claim for an episode of care with a different diagnosis'; }
+            when '7' { return 'Claim for a different service in this episode of care'; }
+            when '8' { return 'Claim for a service that is not related to the primary diagnosis'; }
+            when '9' { return 'Other'; }
             when else { return ''; }
         }
     }
@@ -104,13 +157,11 @@ public class EDI835DataMappings {
     }
     public static String getTRNCode(String traceTypeCode) {
         switch on traceTypeCode {
-            when '1' { return 'Current Transaction Trace'; }
-            when '2' { return 'Correction or Replacement of Prior Transaction Trace'; }
-            when '3' { return 'Referral Trace'; }
-            when '4' { return 'Void of Prior Payment Trace'; }
-            when '5' { return 'Reversal of Prior Payment or Refund Trace'; }
-            when '6' { return 'Administrative Request Trace'; }
-            when '7' { return 'Reversal of Administrative Request Trace'; }
+            when '1' { return 'Represents a unique trace identifier'; }
+            when '2' { return 'Denotes a previously assigned reference number'; }
+            when '3' { return 'Indicates a Cancellation Request'; }
+            when '4' { return 'Represents a Return Request'; }
+            when '5' { return 'Denotes a Change Request'; }
             when else { return ''; }
         }
     }
@@ -139,7 +190,7 @@ public class EDI835DataMappings {
             when '194' { return 'Expiration Date'; }
             when '370' { return 'Last Maintenance Date'; }
             when '405' { return 'Date Shipped'; }
-            when '067' { return 'Document/Reference Date'; }
+            when '067' { return 'Document or Reference Date'; }
             when '038' { return 'Estimated Delivery Date'; }
             when '037' { return 'Cancel Date'; }
             when '051' { return 'Delivery Requested'; }
@@ -150,31 +201,110 @@ public class EDI835DataMappings {
     }
     public static String getREFInfo(String referenceCode) {
         switch on referenceCode {
-            when 'EV' { return 'Event Identification'; }
-            when 'CE' { return 'Claim Adjustment'; } // ask Aniruddha
-            when '2U' { return 'Medicaid Provider Number'; }
-            when '1C' { return 'Primary Care Provider (PCP) Identification'; }
-            when 'G2' { return 'Provider Commercial Number'; }
-            when 'IG' { return 'Patient Control Number'; }
-            when 'N7' { return 'Payor Claim Control Number'; }
-            when 'LU' { return 'Secondary Payor Provider Number'; }
-            when 'XV' { return 'Receiver Identification Number'; }
-            when 'FY' { return 'State Control Number'; }
-            when 'EA' { return 'Electronic Attachment Control Number'; }
-            when 'SY' { return 'Social Security Number'; }
-            when 'DP' { return 'Department Number'; }
-            when 'IA' { return 'Internal Vendor Number'; }
+            when '1K' { return 'Agriculture Department Loan Number'; }
+            when '1S' { return 'Case Number'; }
+            when '2U' { return 'Medicare Claim Number'; }
+            when '3H' { return 'Patients Medicaid Number'; }
+            when '4A' { return 'Hospitals Internal Billing Number'; }
+            when '6R' { return 'Shippers Identification Number'; }//ad
+            when '7R' { return 'Carriers Pro Number'; }
+            when '9A' { return 'Repriced Claim Number'; }
+            when 'AA' { return 'American Bankers Association (ABA) Routing Number'; }
+            when 'AI' { return 'American Institute of Certified Public Accountants (AICPA) Certificate Number'; }
+            when 'AP' { return 'American Petroleum Institute (API) Number'; }
+            when 'BB' { return 'Service Identification Number'; }
+            when 'BM' { return 'Borrowers Loan Number'; }
+            when 'BT' { return 'Bank Transit Number'; }
+            when 'CA' { return 'Cancelled Purchase Order Number'; }
+            when 'CD' { return 'Certificate of Deposit (CD) Number'; }
+            when 'CK' { return 'Check Number'; }
+            when 'CN' { return 'Contract Number'; }
+            when 'CO' { return 'Credit Card Number'; }
+            when 'CR' { return 'Credit Reference Number'; }
+            when 'CU' { return 'Customer Number'; }
+            when 'CV' { return 'Customer Vendor Number'; }
+            when 'EA' { return 'Employer Identification Number (EIN)'; }
+            when 'EM' { return 'Employee Number'; }
+            when 'EN' { return 'Enrollment Number'; }
+            when 'EQ' { return 'Equipment Number'; }
+            when 'EV' { return 'Event Number'; }
+            when 'F8' { return 'Shipping Account Number'; }
+            when 'FN' { return 'Financial Account Number'; }
+            when 'FP' { return 'Federal Provider Number (FPN)'; }
+            when 'FR' { return 'Federal Reserve District Number'; }
+            when 'FT' { return 'Federal Taxpayer Identification Number (FTIN)'; }
+            when 'G1' { return 'Medicare Claim Number'; }
+            when 'G3' { return 'Medicaid Claim Number'; }
+            when 'GB' { return 'Government Bill of Lading Number'; }
+            when 'HC' { return 'Healthcare Provider Identifier (NPI)'; }
+            when 'HI' { return 'Health Insurance Claim Number (HICN)'; }
+            when 'HP' { return 'Hospital Provider Number'; }
+            when 'HPI' { return 'Hospital Provider Index'; }
+            when 'IG' { return 'Investment Grade'; }
+            when 'IN' { return 'Invoice Number'; }
+            when 'LI' { return 'Loan Number'; }
+            when 'LU' { return 'Line Item Unique Identifier'; }
+            //when 'LU' { return 'Location Number'; }
+            when 'MD' { return 'Medical Record Number'; }
+            when 'MN' { return 'Member Number'; }
+            when 'MR' { return 'Medicaid Recipient Identification Number (MRIN)'; }
+            when 'MS' { return 'Master Account Number'; }
+            when 'MT' { return 'Medicare Beneficiary Identifier (MBI)'; }
+            when 'MV' { return 'Motor Vehicle Identification Number (VIN)'; }
+            when 'NA' { return 'National Association of Insurance Commissioners (NAIC) Identifier'; }
+            when 'NC' { return 'National Council for Prescription Drug Programs (NCPDP) Number'; }
+            when 'NE' { return 'National Provider Identifier (NPI)'; }
+            when 'NP' { return 'National Provider Identifier (NPI)'; }
+            when 'NR' { return 'National Provider Identifier (NPI)'; }
+            when 'NT' { return 'National Drug Code (NDC)'; }
+            when 'NU' { return 'National Uniform Claim Committee (NUCC) Procedure Code'; }
+            when 'OA' { return 'Order Acknowledgment Number'; }
+            when 'OC' { return 'Original Purchase Order Number'; }
+            when 'OG' { return 'On-line Position Activity Number'; }
             when 'ON' { return 'Order Number'; }
-            when 'CR' { return 'Contract Number'; }
+            when 'OT' { return 'Other'; }
+            when 'P4' { return 'Price List Number'; }
+            when 'P5' { return 'Property List Number'; }
+            when 'PA' { return 'Patient Account Number'; }
+            when 'PC' { return 'Policy Number'; }
+            when 'PM' { return 'Priority Mail Number'; }
+            when 'PN' { return 'Part Number'; }
+            when 'PO' { return 'Purchase Order Number'; }
+            when 'PP' { return 'Purchase Order Number'; }
+            when 'PR' { return 'Prescription Number'; }
+            when 'PT' { return 'Patient Number'; }
+            when 'PV' { return 'Provider Number'; }
+            when 'PY' { return 'Payer Number'; }
+            when 'R3' { return 'Real Estate Contract Number'; }
+            when 'RA' { return 'Receiving Advice'; }
+            //when 'RA' { return 'Reference Number'; }
+            when 'RB' { return 'Requisition Number'; }
+            when 'RN' { return 'Registered Nurse (RN) License Number'; }
+            when 'RR' { return 'Routing Number'; }
+            when 'RT' { return 'Return Merchandise Authorization Number'; }
+            when 'SA' { return 'Sales Agreement Number'; }
+            when 'SE' { return 'Serial Number'; }
+            when 'SN' { return 'Serial Number'; }
+            when 'SP' { return 'State Provider Number'; }
+            when 'SR' { return 'State Registration Number'; }
+            when 'SS' { return 'Social Security Number (SSN)'; }
+            when 'ST' { return 'State Taxpayer Identification Number (STIN)'; }
+            when 'SV' { return 'Service Provider Number'; }
+            when 'SW' { return 'Social Security Number'; }
+            when 'TA' { return 'Taxpayer Identification Number (TIN)'; }
+            when 'TJ' { return 'Federal Taxpayer Identification Number'; }
+            when 'TN' { return 'Transaction Number'; }
+            when 'TP' { return 'Taxpayer Identification Number (TIN)'; }
+            when 'VN' { return 'Vendor Number'; }
+            when 'VP' { return 'Vendor Number'; }
+            when 'VR' { return 'Vendor Reference Number'; }
+            when 'VY' { return 'Vessel Name'; }
+            when 'XC' { return 'Cross Reference Number'; }
+            when 'XP' { return 'Expiration Date'; }
+            when 'XX' { return 'Not Available'; }
             when 'ZZ' { return 'Mutually Defined'; }
-            when 'TN' { return 'Transaction Reference Number'; }
-            when 'DI' { return 'Distributor Invoice Number'; }
-            when 'CN' { return 'Customer Reference Number'; }
-            when 'TJ' { return 'Federal Tax Payee ID number'; }
-            when 'PQ' { return 'Payer Identification'; }
-            when 'HPI' { return 'Healthcare Provider Information'; }
-            when 'HCP' { return 'Healthcare Claim Payment Information'; }
-            when else {return '';}
+            when else { return ''; }
+            
         }    
     }
     public static String getPERInfo(String contactFunctionCode) {
@@ -201,38 +331,42 @@ public class EDI835DataMappings {
     }
     public static String getClaimStatusDescription(String value) {
         switch on value {
-            when '1' { return 'Paid'; }
-            when '2' { return 'Denied'; }
-            when '3' { return 'Pending'; }
-            when '4' { return 'Pending Partial Payment'; }
-            when '19' { return 'Claim Adjusted'; }
-            when '20' { return 'Zero Payment'; }
-            when '21' { return 'Predetermination Pricing Only'; }
-            when '22' { return 'Not Found'; }
-            when '23' { return 'Processed as Primary'; }
-            when '24' { return 'Processed as Secondary'; }
-            when '25' { return 'Benefits of Another Policy'; }
-            when '26' { return 'No Coverage'; }
-            when '27' { return 'Reduced Benefits'; }
-            when '28' { return 'Forwarded to Additional Payer'; }
-            when '29' { return 'Forwarded to Primary Payer'; }
-            when '31' { return 'Claim Paid in Full'; }
-            when '32' { return 'Claim Denied'; }
-            when '33' { return 'Claim Denied - Info is Required for Adjudication'; }
-            when '34' { return 'Claim Pending'; }
-            when '35' { return 'Claim Pending - Info is Required for Adjudication'; }
+            when '01' { return 'Paid in full'; }
+            when '02' { return 'Denied'; }
+            when '03' { return 'Partially paid'; }
+            when '04' { return 'Duplicate'; }
+            when '05' { return 'Exceeds policy limits'; }
+            when '06' { return 'Benefits exhausted'; }
+            when '07' { return 'Not covered'; }
+            when '08' { return 'Requires further review'; }
+            when '09' { return 'Pending'; }
+            when '10' { return 'Referenced to another plan'; }
+            when '11' { return 'Investigative denial'; }
+            when '12' { return 'Payment pending review'; }
+            when '13' { return 'Predetermination not met'; }
+            when '14' { return 'Benefits limited'; }
+            when '15' { return 'Not eligible for this service'; }
+            when '16' { return 'Coordination of benefits required'; }
+            when '17' { return 'Frequency exceeds policy limits'; }
+            when '18' { return 'Time limits exceed'; }
+            when '19' { return 'Prior authorization required'; }
+            when '20' { return 'Provider not participating'; }
+            when '21' { return 'Requires medical justification'; }
+            when '22' { return 'Duplicate claim'; }
+            when '23' { return 'Services not medically necessary'; }
+            when '98' { return 'Other'; }
             when else { return ''; }
         }
     }
     public static String getAdjustmentReason(String strAdjustGroupCode){
         switch on strAdjustGroupCode  {
-            when 'CO16'{ return 'Contractual Obligations - Claim/service lacks information or has submission/billing error(s).'; }
-            when 'CO8'{ return 'Contractual Obligations - The procedure code is inconsistent with the provider type/specialty (taxonomy)'; }
-            when 'CO18'{ return 'Contractual Obligations - Exact duplicate claim/service'; }
-            when 'CO258' { return 'Contractual Obligations - Claim/service not covered when patient is in custody/incarcerated. Applicable federal, state or local authority may cover the claim/service.'; }
-            when 'CO267' { return 'Contractual Obligations - Claim/service spans multiple months. '; } 
+            when 'CO16'{ return 'Contractual Obligations - Claim or service lacks information or has submission or billing error(s).'; }
+            when 'CO8'{ return 'Contractual Obligations - The procedure code is inconsistent with the provider type or specialty (taxonomy)'; }
+            when 'CO18'{ return 'Contractual Obligations - Exact duplicate claim or service'; }
+            when 'CO258' { return 'Contractual Obligations - Claim or service not covered when patient is in custody or incarcerated. Applicable federal, state or local authority may cover the claim or service.'; }
+            when 'CO267' { return 'Contractual Obligations - Claim or service spans multiple months. '; } 
             when 'CO253'{ return 'Contractual Obligations - Sequestration - reduction in federal payment.'; }
-            when 'CO45'{ return 'Contractual Obligations - Charge exceeds fee schedule/maximum allowable or contracted/legislated fee arrangement.'; }
+            when 'CO45'{ return 'Contractual Obligations - Charge exceeds fee schedule or maximum allowable or contracted or legislated fee arrangement.'; }
             when 'COA8'{ return 'Contractual Obligations - Ungroupable DRG(Patients with an invalid or non-existent ICD-10-CM code).';}
             when 'PR2'{ return 'Patient Responsibility - Coinsurance Amount.'; }
             when else { return ''; }
@@ -266,22 +400,6 @@ public class EDI835DataMappings {
             when else { return ''; }
         }
     }
-    public static String getNM108Code(String identificationCodeQualifier) {
-        switch on identificationCodeQualifier {
-            when '34' { return 'Social Security Number'; }
-            when 'MI' { return 'Member Identification Number'; }
-            when 'II' { return 'Employer\'s Identification Number (EIN)'; }
-            when 'XX' { return 'Health Maintenance Organization (HMO) Policy Number'; }
-            when 'MR' { return 'Medical Record Number'; }
-            when 'FI' { return 'Federal Taxpayer\'s Identification Number'; }
-            when 'PN' { return 'Pension Claim Number'; }
-            when 'SY' { return 'Social Security Number'; }
-            when '1W' { return 'Individual Relationship Identifier (IRI)'; }
-            when 'ZH' { return 'Unique Physician Identification Number (UPIN)'; }
-            when 'PQ' { return 'Payer Identification'; }
-            when else { return ''; }
-        }
-    }
     public static String getAmountText(String amountQualifierCode){
         switch on amountQualifierCode  {
             when '23' { return 'Allowed amount'; }
@@ -292,11 +410,11 @@ public class EDI835DataMappings {
             when '44' { return 'Deductible amount'; }
             when '45' { return 'Discount amount'; }
             when '46' { return 'Eligibility adjustment amount'; }
-            when '47' { return 'Experimental/investigational adjustment amount'; }
+            when '47' { return 'Experimental or investigational adjustment amount'; }
             when '48' { return 'Fraud or abuse adjustment amount'; }
             when '49' { return 'Medical necessity adjustment amount'; }
             when '50' { return 'Patient responsibility amount'; }
-            when '51' { return 'Precertification/authorization adjustment amount'; }
+            when '51' { return 'Precertification or authorization adjustment amount'; }
             when '52' { return 'Provider contract adjustment amount'; }
             when '53' { return 'Reasonable and customary adjustment amount'; }
             when '54' { return 'Timely filing adjustment amount'; }
@@ -324,34 +442,346 @@ public class EDI835DataMappings {
     }
     public static String getpatientClaimIndicatorText(String value) {
         switch on value {
-            when '11' { return 'Other Non-Federal Programs'; }
-            when '12' { return 'Preferred Provider Organization (PPO)'; }
-            when '13' { return 'Point of Service (POS)'; }
-            when '14' { return 'Exclusive Provider Organization (EPO)'; }
-            when '15' { return 'Indemnity Insurance'; }
-            when '16' { return 'Health Maintenance Organization (HMO)'; }
-            when '17' { return 'Dental Maintenance Organization (DMO)'; }
+            when '11' { return 'Inpatient (Medicare Part A)'; }
+            when '12' { return 'Inpatient (Medicare Part B)'; }
+            when '13' { return 'Outpatient (Medicare Part B)'; }
+            when '14' { return 'Outpatient (Medicare Part A)'; }
+            when '15' { return 'Emergency Room (Medicare)'; }
+            when '16' { return 'Professional (Medicare Part B)'; }
+            when '41' { return 'Inpatient (Blue Cross/Blue Shield)'; }
+            when '42' { return 'Inpatient (Blue Cross/Blue Shield)'; }
+            when '43' { return 'Emergency Room (Blue Cross/Blue Shield)'; }
             when 'AM' { return 'Automobile Medical'; }
-            when 'BL' { return 'Blue Cross/Blue Shield'; }
-            when 'CH' { return 'Champus'; }
-            when 'CI' { return 'Commercial Insurance Company'; }
-            when 'DS' { return 'Disability'; }
-            when 'FI' { return 'Federal Employees Program (FEP)'; }
-            when 'HM' { return 'Health Maintenance Organization Medicare Risk'; }
-            when 'LM' { return 'Liability Medical'; }
-            when 'MA' { return 'Medicare Part A'; }
-            when 'MB' { return 'Medicare Part B'; }
-            when 'MC' { return 'Medicaid'; }
-            when 'OF' { return 'Other Federal Program'; }
-            when 'TV' { return 'Title V'; }
-            when 'VA' { return 'Veterans Affairs Plan'; }
+            when 'HM' { return 'Health Maintenance Organization (HMO)'; }
+            when 'MC' { return 'Medicare'; }
+            when 'VA' { return 'Veterans Affairs'; }
             when else { return ''; }
         }
     }
     public static String getHealthCareRemarkCodes(String value) {
         switch on value{
-            when 'HE' { return 'Healthcare'; }
+            when 'HC' { return 'Healthcare'; }
             when 'RX' { return 'Prescription'; }
+            when 'HE' { return 'Claim Payment Remark'; }
+            when 'EB' { return 'Explanation of Benefits Remark'; }
+            when 'RA' { return 'Remittance Advice Remark'; }
+            when 'AR' { return 'Authorization Remark'; }
+            when 'RE' { return 'Referral Remark'; }
+            when 'PR' { return 'Precertification Remark'; }
+            when 'UR' { return 'Utilization Review Remark'; }
+            when 'PA' { return 'Prior Authorization Remark'; }
+            when 'QA' { return 'Quality Assurance Remark'; }
+            when 'FR' { return 'Fraud Remark'; }
+            when 'AB' { return 'Abuse Remark'; }
+            when 'OA' { return 'Other Remark'; }
+            when 'ZZ' { return 'Mutually Defined'; }
+            when else { return ''; }
+        }
+    }   
+    public static String getGSTransactionTypeCodeText(String value) {
+        switch on value{
+            when 'X' { return 'Accredited Standards Committee X12 (ASC X12)'; }
+            when 'D' { return 'United Nations or EDIFACT'; }
+            when 'F' { return 'Finance Industry Standards Association (FISA)'; }
+            when 'I' { return 'Data Interchange Standards Association (DISA)'; }
+            when 'T' { return 'Transportation Data Coordinating Committee (TDCC)'; }
+            when else { return ''; }
+        }
+    }
+    public static String getSecurityInfoQualifierText(String securityCode) {
+        switch on securityCode {
+            when '00' { return 'No Security Information'; }
+            when '01' { return 'Password'; }
+            when '02' { return 'Digital Certificate'; }
+            when '03' { return 'Kerberos'; }
+            when '04' { return 'Public or Private Key Pair'; }
+            when else { return ''; }
+        }
+    }
+    public static String getAuthorizationType(String authCode) {
+        switch on authCode {
+            when '00' { return 'No Authorization Information Present'; }
+            when '01' { return 'Password'; }
+            when '02' { return 'Secured Certificate'; }
+            when '03' { return 'Kerberos'; }
+            when '04' { return 'SSL (Secure Socket Layer)'; }
+            when '05' { return 'S or MIME (Secure or Multipurpose Internet Mail Extensions)'; }
+            when '06' { return 'TLS (Transport Layer Security)'; }
+            when '07' { return 'SSH (Secure Shell)'; }
+            when else { return ''; }
+        }
+    }
+    public static String getackRequestedText(String authCode) {
+        switch on authCode {
+            when '0' { return 'No acknowledgment is requested'; }
+            when '1' { return 'An acknowledgment is requested'; }
+            when else { return ''; }
+        }
+    }
+    public static String getBPRIdentificationType(String code) {
+        switch on code {
+            when '01' { return 'American Bankers Association (ABA) Transit Routing Number'; }
+            when '02' { return 'Society for Worldwide Interbank Financial Telecommunication (SWIFT) ID'; }
+            when '03' { return 'Clearing House Interbank Payments System (CHIPS) Participant ID'; }
+            when '04' { return 'Canadian Payments Association routing number'; }
+            when '05' { return 'Electronic Transaction Identifiers (ETI)'; }
+            when '06' { return 'National Clearing Code'; }
+            when '07' { return 'German Bankleitzahl (BLZ) Code'; }
+            when '08' { return 'Australian Bank State Branch (BSB) Code'; }
+            when '09' { return 'Swiss Clearing Code'; }
+            when '10' { return 'Indian Financial System Code (IFSC)'; }
+            when else { return ''; }
+        }
+    }
+    public static String getN1IdentificationCode(String code) {
+        switch on code {
+            when 'FI' { return 'Federal Taxpayer Identification Number'; }
+            when 'XV' { return 'Health Care Financing Administration'; }
+            when 'MI' { return 'Member Identification Number'; }
+            when 'NF' { return 'National Association of Insurance Commissioners Company Code'; }
+            when 'SY' { return 'Social Security Number'; }
+            when 'ZZ' { return 'Mutually Defined'; }
+            when 'NI' { return 'National Association of Insurance Commissioners (NAIC) Identification'; }
+            when 'PR' { return 'Payer'; }
+            when 'PE' { return 'Payee'; }
+            when '41' { return 'Name of the referring physician'; }
+            when 'FA' { return 'Facility'; }
+            when 'IL' { return 'Insured or Subscriber'; }
+            when 'TQ' { return 'Treatment Authorization Code'; }
+            when '1P' { return 'Person'; }
+            when '2P' { return 'Partnership'; }
+            when '3P' { return 'Corporation'; }
+            when '4P' { return 'Non-Person Entity'; }
+            when '6P' { return 'Government Agency'; }
+            when '71' { return 'Party'; }
+            when '72' { return 'Service Provider'; }
+            when 'XX' { return 'Health Care Financing Administration National Provider Identifier (NPI)'; }
+            when else { return ''; }
+        }
+    }
+    public static String getPERContactFunctionCodeText(String code) {
+        switch on code {
+            when 'AA' { return 'Assistant'; }
+            when 'AC' { return 'Accountant'; }
+            when 'AD' { return 'Authorized Representative'; }
+            when 'AE' { return 'Associate Engineer'; }
+            when 'AG' { return 'Agent'; }
+            when 'AH' { return 'Authorizing Party'; }
+            when 'AI' { return 'Additional Individual'; }
+            when 'AL' { return 'Alternative Individual'; }
+            when 'AM' { return 'Alternate Accountant'; }
+            when 'AN' { return 'Additional Contact'; }
+            when 'AP' { return 'Account Payable Contact'; }
+            when 'AQ' { return 'Additional Authorized Representative'; }
+            when 'AR' { return 'Additional Representative'; }
+            when 'AS' { return 'Assistant to'; }
+            when 'AT' { return 'Authorized Technician'; }
+            when 'AU' { return 'Author'; }
+            when 'AZ' { return 'Additional Contact Name'; }
+            when 'BE' { return 'Beneficiary'; }
+            when 'BL' { return 'Shippers Contact'; }
+            when 'BR' { return 'Brokers Contact or Buyer'; }
+            when 'BS' { return 'Buying Group Staff'; }
+            when 'BU' { return 'Backup Contact'; }
+            when 'CA' { return 'Contact'; }
+            when 'CB' { return 'Combined Office or Plant Representative'; }
+            when 'CC' { return 'Contact to Call'; }
+            when 'CI' { return 'Consultant'; }
+            when 'CL' { return 'Complainant'; }
+            when 'CN' { return 'Consignee\'s Contact or Contact'; }
+            when 'CO' { return 'Company Officer'; }
+            when 'CP' { return 'Contact Person'; }
+            when 'CR' { return 'Carrier'; }
+            when 'CS' { return 'Case Worker'; }
+            when 'CT' { return 'Contact Person'; }
+            when 'CU' { return 'Customer'; }
+            when 'CX' { return 'Contact Person'; }
+            when 'CZ' { return 'Certified Public Accountant (CPA)'; }
+            when 'DA' { return 'Data Recipient'; }
+            when 'DE' { return 'Designated Associate Engineer'; }
+            when 'DG' { return 'Designated Underwriter'; }
+            when 'DH' { return 'Designated Representative'; }
+            when 'DI' { return 'Designated Individual'; }
+            when 'DL' { return 'Delivery Department'; }
+            when 'DM' { return 'Decision Maker'; }
+            when 'DN' { return 'Distributor'; }
+            when 'DP' { return 'Designated Person'; }
+            when 'DR' { return 'Director'; }
+            when 'DS' { return 'Decision Support'; }
+            when 'DU' { return 'Designee'; }
+            when 'DV' { return 'Developer'; }
+            when 'EA' { return 'Employee'; }
+            when 'EC' { return 'Emergency Contact'; }
+            when 'EE' { return 'Engineering Department'; }
+            when 'EF' { return 'Estate Contact'; }
+            when 'EG' { return 'Engineer'; }
+            when 'EM' { return 'Emergency'; }
+            when 'EN' { return 'Engineer of Record'; }
+            when 'EO' { return 'Educational Officer'; }
+            when 'EP' { return 'Exchange Partner'; }
+            when 'ER' { return 'Emergency Room'; }
+            when 'ES' { return 'Expert or Scientist'; }
+            when 'EV' { return 'Evaluator'; }
+            when 'EX' { return 'Exchange Manager, Executor of Estate, Exporter\'s Contact'; }
+            when 'FA' { return 'Facsimile'; }
+            when 'FI' { return 'Financial Institution Contact'; }
+            when 'FO' { return 'Financial Officer'; }
+            when 'FP' { return 'Financial Person'; }
+            when 'FR' { return 'Filer'; }
+            when 'FS' { return 'Fiduciary'; }
+            when 'GA' { return 'General Partner'; }
+            when 'GC' { return 'General Contractor'; }
+            when 'GE' { return 'General Engineer'; }
+            when 'GN' { return 'General Information'; }
+            when 'GR' { return 'Group Manager'; }
+            when 'GS' { return 'General Supervisor'; }
+            when 'GU' { return 'Guardian'; }
+            when 'HC' { return 'Health Care Provider'; }
+            when 'HR' { return 'Human Resources Contact'; }
+            when 'IA' { return 'Injured Party'; }
+            when 'IC' { return 'In Charge Person'; }
+            when 'ID' { return 'Internal Contact'; }
+            when 'II' { return 'Insured or Subscriber'; }
+            when 'IM' { return 'Importer'; }
+            when 'IN' { return 'Informant, Interested Party'; }
+            when 'IP' { return 'Individual to Receive Purchase Order, Insured Party'; }
+            when 'IS' { return 'Information Services Contact'; }
+            when 'IT' { return 'Investor'; }
+            when 'IU' { return 'Internal Use'; }
+            when 'JV' { return 'Joint Venture'; }
+            when 'LD' { return 'Limited Partner'; }
+            when 'LE' { return 'Legal Counsel'; }
+            when 'LR' { return 'Legal Representative, Lender'; }
+            when 'LS' { return 'Landlord'; }
+            when 'LT' { return 'Land Trustee'; }
+            when 'MA' { return 'Manager'; }
+            when 'MB' { return 'Member'; }
+            when 'MC' { return 'Manager of Sales'; }
+            when 'ME' { return 'Maintenance Engineer'; }
+            when 'MR' { return 'Member of the Firm'; }
+            when 'MS' { return 'Managing Partner'; }
+            when 'MU' { return 'Mutual Company'; }
+            when 'MV' { return 'Master Servicer'; }
+            when 'MW' { return 'Master of the Work'; }
+            when 'MX' { return 'Master Beneficiary'; }
+            when 'NA' { return 'Notary'; }
+            when 'NC' { return 'Notice Contact'; }
+            when 'NP' { return 'Name Partner'; }
+            when 'NS' { return 'Nurse'; }
+            when 'NU' { return 'Nursing Department'; }
+            when 'OA' { return 'Office Automation'; }
+            when 'OC' { return 'Officer, Originating Carrier'; }
+            when 'OE' { return 'Officer of the Company'; }
+            when 'OP' { return 'Owner Partner'; }
+            when 'OV' { return 'Owner'; }
+            when 'PA' { return 'Paralegal'; }
+            when 'PB' { return 'Publisher'; }
+            when 'PC' { return 'Partner'; }
+            when 'PD' { return 'Payee'; }
+            when 'PE' { return 'Payor'; }
+            when 'PG' { return 'Programming'; }
+            when 'PH' { return 'Pharmacist'; }
+            when 'PI' { return 'Personal Representative'; }
+            when 'PL' { return 'Principal Investigator'; }
+            when 'PM' { return 'Project Manager'; }
+            when 'PN' { return 'Person'; }
+            when 'PO' { return 'Purchasing Contact'; }
+            when 'PP' { return 'Person to Pick Up Parts, Purchasing Party'; }
+            when 'PR' { return 'Payer, President'; }
+            when 'PS' { return 'Personnel Supervisor'; }
+            when 'PT' { return 'Partner Technical'; }
+            when 'PU' { return 'Pick Up Person'; }
+            when 'PY' { return 'Payroll Department'; }
+            when 'QA' { return 'Quality Assurance Contact'; }
+            when 'QB' { return 'Quantity Buyer'; }
+            when 'QC' { return 'Quality Control'; }
+            when 'QD' { return 'Quality Control Department'; }
+            when 'QO' { return 'Quantity Owner'; }
+            when 'RA' { return 'Receptionist'; }
+            when 'RB' { return 'Receiving'; }
+            when 'RE' { return 'Receiver, Recipient'; }
+            when 'RF' { return 'Referral'; }
+            when 'RG' { return 'Regional Contact'; }
+            when 'RH' { return 'Recipient'; }
+            when 'RI' { return 'Reference Individual'; }
+            when 'RM' { return 'Registered Mail'; }
+            when 'RP' { return 'Representative, Responsible Party'; }
+            when 'RQ' { return 'Requestor'; }
+            when 'RR' { return 'Release Recipient'; }
+            when 'RS' { return 'Regulatory Services'; }
+            when 'RT' { return 'Regional Contact'; }
+            when 'RU' { return 'Responsible Union'; }
+            when 'RW' { return 'Regional Welding'; }
+            when 'RY' { return 'Referral Yard'; }
+            when 'SA' { return 'Sales Representative, Shipper\'s Agent'; }
+            when 'SB' { return 'Shipping Contact'; }
+            when 'SC' { return 'Shipper\'s Contact'; }
+            when 'SD' { return 'Shipment Delivery'; }
+            when 'SE' { return 'Seals Data Contact, Second Engineer'; }
+            when 'SH' { return 'Secretary'; }
+            when 'SI' { return 'Shipper'; }
+            when 'SK' { return 'Shipper\'s Sales Representative'; }
+            when 'SL' { return 'Sale'; }
+            when 'SM' { return 'Senior Manager'; }
+            when 'SN' { return 'Shipper\'s Credit Department'; }
+            when 'SO' { return 'State Officer'; }
+            when 'SP' { return 'Sales'; }
+            when 'SQ' { return 'Supervisor - Quoting'; }
+            when 'SR' { return 'Service Bureau'; }
+            when 'SS' { return 'Seller'; }
+            when 'ST' { return 'Survey Team'; }
+            when 'SU' { return 'Subscriber, Supervisor, Supplier'; }
+            when 'TA' { return 'Testing'; }
+            when 'TC' { return 'Technical Contact'; }
+            when 'TE' { return 'Technical'; }
+            when 'TH' { return 'Trustee'; }
+            when 'TI' { return 'Title Company'; }
+            when 'TL' { return 'Trustee for the Lender'; }
+            when 'TO' { return 'Technical Officer, Terminal Operator'; }
+            when 'TP' { return 'Third Party'; }
+            when 'TR' { return 'Trading Partner'; }
+            when 'TS' { return 'Technical Support Contact'; }
+            when 'TU' { return 'Transportation Officer'; }
+            when 'TV' { return 'Treasurer'; }
+            when 'TX' { return 'Taxpayer'; }
+            when 'TZ' { return 'Telecommunications Manager'; }
+            when 'UC' { return 'Union Representative'; }
+            when 'UL' { return 'Ultimate Parent'; }
+            when 'UM' { return 'Underwriting Department'; }
+            when 'UN' { return 'Unknown'; }
+            when 'UR' { return 'Underwriter'; }
+            when 'VA' { return 'Vendor'; }
+            when 'VC' { return 'Vendor Contact'; }
+            when 'VI' { return 'Vendor Information'; }
+            when 'VL' { return 'Violator'; }
+            when 'VO' { return 'Vendor of Record'; }
+            when 'VP' { return 'Vice President'; }
+            when 'VR' { return 'Verification'; }
+            when 'WH' { return 'Warehouse'; }
+            when 'WI' { return 'Within'; }
+            when 'WR' { return 'Writer'; }
+            when 'WU' { return 'Withholding Agent'; }
+            when 'XI' { return 'Executor'; }
+            when 'XM' { return 'Executive Manager'; }
+            when 'XS' { return 'X-Ray Specialist'; }
+            when 'YR' { return 'Yard Person'; }
+            when else { return ''; }
+        }
+    }
+    public static String getcreditDebitFlagText(String code) {
+        switch on code {
+            when 'C' { return 'Credit'; }
+            when 'D' { return 'Debit'; }
+            when else { return ''; }
+        }
+    }//paymentMethodCodeText
+    public static String getpaymentMethodCodeText(String code) {
+        switch on code {
+            when 'ACH' { return 'Automated Clearing House (ACH) - Electronic Fund Transfer'; }
+            when 'BOP' { return 'Balance of Payment'; }
+            when 'CHK' { return 'Paper Check'; }
+            when 'FWT' { return 'Federal Withholding Tax (FWT)'; }
+            when 'NON' { return 'No Payment Made or Non-Payment Data'; }
             when else { return ''; }
         }
     }    
