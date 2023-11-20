@@ -153,7 +153,7 @@ public class EDI835toJSON {
                         gen.writeFieldName('payerAddress');
                         gen.writeStartObject();
                         gen.writeObjectField('address1', segmentDataSize > 1 ?  segmentData[j][1] : '');
-                        gen.writeObjectField('address2', segmentDataSize > 2 ?  segmentData[j][2] : '');//9-11
+                        gen.writeObjectField('address2', segmentDataSize > 2 ?  segmentData[j][2] : '');
                         gen.writeEndObject();
                     }
                     if(segmentData[j][0].equals('N4')){
@@ -239,7 +239,7 @@ public class EDI835toJSON {
                 gen.writeObjectField('payeeIdentificationCode', segmentDataSize > 4 ? segmentData[i][4] : '');
                 gen.writeEndObject();
                 for(Integer j = i+1; j< segmentData.size();j++){
-                    if(segmentData[j][0].equals('LX')){ //doubt
+                    if(segmentData[j][0].equals('LX')){ 
                         break;
                     }
                     if(segmentData[j][0].equals('N3')){
@@ -305,7 +305,7 @@ public class EDI835toJSON {
                 gen.writeStartObject();
                 gen.writeObjectField('providerIdentifier', segmentDataSize > 1 ? segment[1] : '');
                 gen.writeObjectField('facilityTypeCode', segmentDataSize > 2 ?  segment[2] : '');
-                gen.writeObjectField('facilityTypeCodeText', segmentDataSize > 2 ?  EDI835DataMappings.getTS3FacilityTypeCode(segment[2]) : '');//segment[2] Data Map
+                gen.writeObjectField('facilityTypeCodeText', segmentDataSize > 2 ?  EDI835DataMappings.getTS3FacilityTypeCode(segment[2]) : '');
                 gen.writeObjectField('fiscalPeriodDate', segmentDataSize > 3 ? segment[3] : '');
                 gen.writeObjectField('totalClaimCount',segmentDataSize > 4 ?  segment[4] : '');
                 gen.writeObjectField('totalClaimChargeAmount',segmentDataSize > 5 ?  segment[5] : '');
@@ -351,8 +351,8 @@ public class EDI835toJSON {
                         gen.writeObjectField('lastName', segmentDataSize > 3 ? segmentData[j][3] : '');
                         gen.writeObjectField('firstName', segmentDataSize > 4 ? segmentData[j][4] : '');
                         gen.writeObjectField('middleInitial',  segmentDataSize > 5 ? segmentData[j][5] : ''); 
-                        gen.writeObjectField('namePrefix',  segmentDataSize > 6 ? segmentData[j][6] : ''); //9-11
-                        gen.writeObjectField('nameSuffix',  segmentDataSize > 7 ? segmentData[j][7] : ''); //9-11
+                        gen.writeObjectField('namePrefix',  segmentDataSize > 6 ? segmentData[j][6] : ''); 
+                        gen.writeObjectField('nameSuffix',  segmentDataSize > 7 ? segmentData[j][7] : ''); 
                         gen.writeObjectField('identificationCodeQualifier',  segmentDataSize > 8 ? segmentData[j][8] : ''); 
                         gen.writeObjectField('identificationCodeQualifierText',  segmentDataSize > 8 ? EDI835DataMappings.getNM1SegmentCodes(segmentData[j][8]) : ''); 
                         gen.writeObjectField('memberNumber',  segmentDataSize > 9 ? segmentData[j][9] : ''); 
@@ -361,7 +361,7 @@ public class EDI835toJSON {
                     if(segmentData[j][0].equals('NM1') && segmentData[j][1].contains('82')){
                         segmentDataSize = segmentData[j].size();
                         gen.writeFieldName('insured');
-                        gen.writeStartObject();//Add remaining fields
+                        gen.writeStartObject();
                         gen.writeObjectField('entityIdentifierCode', segmentDataSize > 1 ? segmentData[j][1] : '');
                         gen.writeObjectField('entityIdentifierCodeText', segmentDataSize > 1 ? EDI835DataMappings.getNM1SegmentCodes(segmentData[j][1]) : '');
                         gen.writeObjectField('entityIdentifierCode', segmentDataSize > 1 ? segmentData[j][1] : '');
