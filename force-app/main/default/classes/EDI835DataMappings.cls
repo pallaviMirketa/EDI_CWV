@@ -35,10 +35,10 @@ public class EDI835DataMappings {
         switch on value {
             when '34' { return 'Social Security Number'; }
             when 'MI' { return 'Member Identification Number'; }
-            when 'II' { return 'Employers Identification Number (EIN)'; }//
+            when 'II' { return 'Employers Identification Number (EIN)'; }
             when 'XX' { return 'Health Maintenance Organization (HMO) Policy Number'; }
             when 'MR' { return 'Medical Record Number'; }
-            when 'FI' { return 'Federal Taxpayers Identification Number'; }//
+            when 'FI' { return 'Federal Taxpayers Identification Number'; }
             when 'PN' { return 'Pension Claim Number'; }
             when 'SY' { return 'Social Security Number'; }
             when '1W' { return 'Individual Relationship Identifier (IRI)'; }
@@ -69,8 +69,6 @@ public class EDI835DataMappings {
             when 'D' { return 'debit transaction'; }
             when 'H' { return 'Automated Clearing House (ACH) CCD+'; }
             when 'I' { return 'Electronic funds transfer or similar transaction'; }
-            //when 'R' { return 'Reserved for Future Use'; }
-            //when 'W' { return 'Wire Transfer'; }
             when 'P' {return 'payment is being made to the payee' ;}
             when else { return ''; }
         }
@@ -206,7 +204,7 @@ public class EDI835DataMappings {
             when '2U' { return 'Medicare Claim Number'; }
             when '3H' { return 'Patients Medicaid Number'; }
             when '4A' { return 'Hospitals Internal Billing Number'; }
-            when '6R' { return 'Shippers Identification Number'; }//ad
+            when '6R' { return 'Shippers Identification Number'; }
             when '7R' { return 'Carriers Pro Number'; }
             when '9A' { return 'Repriced Claim Number'; }
             when 'AA' { return 'American Bankers Association (ABA) Routing Number'; }
@@ -244,7 +242,6 @@ public class EDI835DataMappings {
             when 'IN' { return 'Invoice Number'; }
             when 'LI' { return 'Loan Number'; }
             when 'LU' { return 'Line Item Unique Identifier'; }
-            //when 'LU' { return 'Location Number'; }
             when 'MD' { return 'Medical Record Number'; }
             when 'MN' { return 'Member Number'; }
             when 'MR' { return 'Medicaid Recipient Identification Number (MRIN)'; }
@@ -277,7 +274,6 @@ public class EDI835DataMappings {
             when 'PY' { return 'Payer Number'; }
             when 'R3' { return 'Real Estate Contract Number'; }
             when 'RA' { return 'Receiving Advice'; }
-            //when 'RA' { return 'Reference Number'; }
             when 'RB' { return 'Requisition Number'; }
             when 'RN' { return 'Registered Nurse (RN) License Number'; }
             when 'RR' { return 'Routing Number'; }
@@ -358,17 +354,117 @@ public class EDI835DataMappings {
             when else { return ''; }
         }
     }
-    public static String getAdjustmentReason(String strAdjustGroupCode){
+    public static String getAdjustmentGroupCode(String strAdjustGroupCode){
         switch on strAdjustGroupCode  {
-            when 'CO16'{ return 'Contractual Obligations - Claim or service lacks information or has submission or billing error(s).'; }
-            when 'CO8'{ return 'Contractual Obligations - The procedure code is inconsistent with the provider type or specialty (taxonomy)'; }
-            when 'CO18'{ return 'Contractual Obligations - Exact duplicate claim or service'; }
-            when 'CO258' { return 'Contractual Obligations - Claim or service not covered when patient is in custody or incarcerated. Applicable federal, state or local authority may cover the claim or service.'; }
-            when 'CO267' { return 'Contractual Obligations - Claim or service spans multiple months. '; } 
-            when 'CO253'{ return 'Contractual Obligations - Sequestration - reduction in federal payment.'; }
-            when 'CO45'{ return 'Contractual Obligations - Charge exceeds fee schedule or maximum allowable or contracted or legislated fee arrangement.'; }
-            when 'COA8'{ return 'Contractual Obligations - Ungroupable DRG(Patients with an invalid or non-existent ICD-10-CM code).';}
-            when 'PR2'{ return 'Patient Responsibility - Coinsurance Amount.'; }
+            when 'CO' { return 'Contractual Obligations'; }
+            when 'CR' { return 'Corrections and Reversals'; }
+            when 'OA' { return 'Other Adjustments'; }
+            when 'PI' { return 'Payer Initiated Reductions'; }
+            when 'PR' { return 'Patient Responsibility'; }
+            when 'ZZ' { return 'Mutually Defined'; }
+            when else { return ''; }
+        }
+    }
+    public static String getAdjustmentReason(String strAdjustReason){
+        switch on strAdjustReason  {
+            when '1' { return 'COB Adjustment - Primary Payer'; }
+            when '2' { return 'Coinsurance Adjustment'; }
+            when '3' { return 'Lifetime Maximum Reached'; }
+            when '4' { return 'Deductible Adjustment'; }
+            when '5' { return 'Frequency Limitation Exceeded'; }
+            when '6' { return 'Non-Covered Service or Item'; }
+            when '7' { return 'Prior Authorization Required'; }
+            when '8' { return 'Coordination of Benefits (COB) Adjustment - Other Payer'; }
+            when '9' { return 'Health Maintenance Organization (HMO) Capitation Adjustment'; }
+            when '10' { return 'Preferred Provider Organization (PPO) Discount'; }
+            when '11' { return 'Non-Participating Provider Adjustment'; }
+            when '12' { return 'Non-Covered Charge Adjustment'; }
+            when '13' { return 'Patient Responsibility Adjustment'; }
+            when '14' { return 'Other Contractual Adjustment'; }
+            when '15' { return 'Non-Covered Service by Contract'; }
+            when '16' { return 'Medicare Secondary Payer (MSP) Adjustment'; }
+            when '17' { return 'Duplicate Submission'; }
+            when '18' { return 'Other Contractual Adjustment'; }
+            when '19' { return 'Non-Covered Charge by Contract'; }
+            when '20' { return 'Withhold Payment'; }
+            when '21' { return 'Contractual Overpayment Adjustment'; }
+            when '22' { return 'Coordination of Benefits Adjustment'; }
+            when '23' { return 'Prior Payment Adjustment'; }
+            when '24' { return 'Internal Revenue Service (IRS) Levy Adjustment'; }
+            when '25' { return 'Claim Adjustment'; }
+            when '26' { return 'Withhold Payment - Pending Further Review'; }
+            when '27' { return 'Claim Adjustment - Denied'; }
+            when '28' { return 'Claim Adjustment - Approved'; }
+            when '29' { return 'Withhold Payment'; }
+            when '30' { return 'Claim Adjustment - Corrected'; }
+            when '31' { return 'Claim Adjustment - Suspended'; }
+            when '32' { return 'Claim Adjustment - Reversed'; }
+            when '33' { return 'Claim Adjustment - Void'; }
+            when '34' { return 'Claim Adjustment - Finalized'; }
+            when '35' { return 'Claim Adjustment - Pending'; }
+            when '36' { return 'Claim Adjustment - Reopened'; }
+            when '37' { return 'Claim Adjustment - Closed'; }
+            when '38' { return 'Claim Adjustment - Approved - Pending Payment'; }
+            when '39' { return 'Claim Adjustment - Denied - Pending Review'; }
+            when '40' { return 'Claim Adjustment - Appeal Approved'; }
+            when '41' { return 'Claim Adjustment - Appeal Denied'; }
+            when '42' { return 'Deductible Adjustment'; }
+            when '43' { return 'Claim Adjustment - Processed'; }
+            when '44' { return 'Claim Adjustment - Not Processed'; }
+            when '45' { return 'Payment Adjustment'; }
+            when '46' { return 'Payment Adjustment - Overpayment'; }
+            when '47' { return 'Payment Adjustment - Underpayment'; }
+            when '48' { return 'Payment Adjustment - Duplicate Payment'; }
+            when '49' { return 'Payment Adjustment - Void Payment'; }
+            when '50' { return 'Payment Adjustment - Corrected Payment'; }
+            when '51' { return 'Payment Adjustment - Suspended Payment'; }
+            when '52' { return 'Payment Adjustment - Reversed Payment'; }
+            when '53' { return 'Payment Adjustment - Finalized Payment'; }
+            when '54' { return 'Payment Adjustment - Pending Payment'; }
+            when '55' { return 'Payment Adjustment - Reopened Payment'; }
+            when '56' { return 'Payment Adjustment - Closed Payment'; }
+            when '57' { return 'Payment Adjustment - Approved - Pending Disbursement'; }
+            when '58' { return 'Payment Adjustment - Denied - Pending Review'; }
+            when '59' { return 'Payment Adjustment - Appeal Approved'; }
+            when '60' { return 'Payment Adjustment - Appeal Denied'; }
+            when '61' { return 'Withhold Adjustment'; }
+            when '62' { return 'Withhold Adjustment - Overpayment'; }
+            when '63' { return 'Withhold Adjustment - Underpayment'; }
+            when '64' { return 'Withhold Adjustment - Duplicate Withhold'; }
+            when '65' { return 'Withhold Adjustment - Void Withhold'; }
+            when '66' { return 'Withhold Adjustment - Corrected Withhold'; }
+            when '67' { return 'Withhold Adjustment - Suspended Withhold'; }
+            when '68' { return 'Withhold Adjustment - Reversed Withhold'; }
+            when '69' { return 'Withhold Adjustment - Finalized Withhold'; }
+            when '70' { return 'Withhold Adjustment - Pending Withhold'; }
+            when '71' { return 'Withhold Adjustment - Reopened Withhold'; }
+            when '72' { return 'Withhold Adjustment - Closed Withhold'; }
+            when '73' { return 'Withhold Adjustment - Approved - Pending Release'; }
+            when '74' { return 'Withhold Adjustment - Denied - Pending Review'; }
+            when '75' { return 'Withhold Adjustment - Appeal Approved'; }
+            when '76' { return 'Withhold Adjustment - Appeal Denied'; }
+            when '77' { return 'Other Adjustment Remark'; }
+            when '78' { return 'Contractual Adjustment Remark'; }
+            when '79' { return 'Payment Remark'; }
+            when '80' { return 'Coordination of Benefits (COB) Adjustment - Primary Payer'; }
+            when '81' { return 'Coinsurance Adjustment'; }
+            when '82' { return 'Lifetime Maximum Reached'; }
+            when '83' { return 'Deductible Adjustment'; }
+            when '84' { return 'Frequency Limitation Exceeded'; }
+            when '85' { return 'Non-Covered Service or Item'; }
+            when '86' { return 'Prior Authorization Required'; }
+            when '87' { return 'Coordination of Benefits (COB) Adjustment - Other Payer'; }
+            when '88' { return 'Health Maintenance Organization (HMO) Cap'; }
+            when '141' { return 'Non-Covered Service or Item'; }
+            when '104' { return 'Contractual Adjustment'; }
+            when '267' { return 'MSP Crossover Adjustment - Conditional Payment'; }
+            when 'A8' { return 'COB Adjustment - Secondary Payer'; }
+            when '258' { return 'COB Adjustment - Other Payer'; }
+            when '253' { return 'Withhold Adjustment'; }
+            when 'PR' { return 'Payment Remark'; }
+            when 'CR' { return 'Contractual Adjustment Remark'; }
+            when 'OA' { return 'Other Adjustment Remark'; }
+            when 'PI' { return 'Payment Information'; }
             when else { return ''; }
         }
     }
@@ -782,7 +878,7 @@ public class EDI835DataMappings {
             when 'D' { return 'Debit'; }
             when else { return ''; }
         }
-    }//paymentMethodCodeText
+    }
     public static String getpaymentMethodCodeText(String code) {
         switch on code {
             when 'ACH' { return 'Automated Clearing House (ACH) - Electronic Fund Transfer'; }

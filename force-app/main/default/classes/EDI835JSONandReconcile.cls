@@ -6,13 +6,18 @@ public class EDI835JSONandReconcile{
         
         //if the status is not equal to 835P EDI Received it will throw an error
         if (objDataRecord.Status__c == '837P EDI Received' || objDataRecord.Status__c == 'Is Download' || objDataRecord.Status__c == '835 EDI Processed' ) {
-            throw new AuraHandledException('Status should be 835 EDI Received');    
+            throw new AuraHandledException('Status should be: 835 EDI Received');    
         }
+        
         //get the EDI 835 file
         List<ContentDocumentLink> contentDocumentLink = [SELECT Id, ContentDocumentId, ContentDocument.Title, ContentDocument.FileExtension, ContentDocument.Description, ContentDocument.LatestPublishedVersionId FROM ContentDocumentLink WHERE  LinkedEntityId = :objDataRecord.Id   limit 1  ];
-        if (!contentDocumentLink.isEmpty()) {
+        System.debug('contentDocumentLink '+ contentDocumentLink);
+        
+        //throw an error if there is no file
+        if (contentDocumentLink.isEmpty()) {
             throw new AuraHandledException('Upload an EDI_835 File.');    
         }
+        
         ContentDocument contentDocument = [SELECT Id, Title, FileExtension, Description, LatestPublishedVersionId, LatestPublishedVersion.VersionData FROM ContentDocument WHERE Id =: contentDocumentLink[0].ContentDocumentId];
         ContentVersion contentVersion = [SELECT Id, Title,VersionData FROM ContentVersion WHERE ContentDocumentId = :contentDocument.Id];
         
@@ -27,6 +32,7 @@ public class EDI835JSONandReconcile{
                 combinedData = data.toString();
             }
         }
+        
         String EDI835JSON = EDI835toJSON.parseEDItoJSON(combinedData);
         ContentVersion cv = new ContentVersion();
         cv.Title = 'EDI_835_JSON_File_' + DateTime.Now().format('dd-MMM-yy HH:mm:ss');
@@ -35,7 +41,6 @@ public class EDI835JSONandReconcile{
         insert cv;
         
         List<ContentVersion> cvList = [SELECT ContentDocumentId FROM ContentVersion WHERE Id = :cv.Id];
-        System.debug('cvList '+ cvList);
         
         if (!cvList.isEmpty()) {
             ContentDocumentLink cdl = new ContentDocumentLink();
@@ -50,7 +55,6 @@ public class EDI835JSONandReconcile{
         }
         objDataRecord.Status__c = '835 EDI Processed';  
         update objDataRecord;
-        System.debug('EDI835JSON '+  EDI835JSON);
         try {
             Json835Response.PostClaimUpdation(EDI835JSON); 
         }
