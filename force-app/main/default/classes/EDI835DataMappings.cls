@@ -13,7 +13,7 @@ public class EDI835DataMappings {
             when '29' { return 'Medicare Provider and Supplier Identification'; }
             when '30' { return 'US Federal Tax Identification Number'; }
             when '31' { return 'National Association of Insurance Commissioners Company Code (NAIC)'; }
-            when else { return 'Unknown Identifier'; }
+            when else { return ''; }
         }
     }
     public static String getGSSegmentCodes(String codeText) {
@@ -28,7 +28,7 @@ public class EDI835DataMappings {
             when 'RA' { return 'Remittance Advice'; }
             when 'SH' { return 'Health Care Services Review Information'; }
             when 'TH' { return 'Health Care Claim'; }
-            when else { return 'Unknown Transaction Code'; }
+            when else { return ''; }
         }
     }
     public static String getNM1SegmentCodes(String value) {
@@ -442,19 +442,27 @@ public class EDI835DataMappings {
     }
     public static String getpatientClaimIndicatorText(String value) {
         switch on value {
-            when '11' { return 'Inpatient (Medicare Part A)'; }
-            when '12' { return 'Inpatient (Medicare Part B)'; }
-            when '13' { return 'Outpatient (Medicare Part B)'; }
-            when '14' { return 'Outpatient (Medicare Part A)'; }
-            when '15' { return 'Emergency Room (Medicare)'; }
-            when '16' { return 'Professional (Medicare Part B)'; }
-            when '41' { return 'Inpatient (Blue Cross/Blue Shield)'; }
-            when '42' { return 'Inpatient (Blue Cross/Blue Shield)'; }
-            when '43' { return 'Emergency Room (Blue Cross/Blue Shield)'; }
+            when '11' { return 'Other Non-Federal Programs'; }
+            when '12' { return 'Preferred Provider Organization (PPO)'; }
+            when '13' { return 'Point of Service (POS)'; }
+            when '14' { return 'Exclusive Provider Organization (EPO)'; }
+            when '15' { return 'Indemnity Insurance'; }
+            when '16' { return 'Health Maintenance Organization (HMO)'; }
+            when '17' { return 'Dental Maintenance Organization (DMO)'; }
             when 'AM' { return 'Automobile Medical'; }
-            when 'HM' { return 'Health Maintenance Organization (HMO)'; }
-            when 'MC' { return 'Medicare'; }
-            when 'VA' { return 'Veterans Affairs'; }
+            when 'BL' { return 'Blue Cross/Blue Shield'; }
+            when 'CH' { return 'Champus'; }
+            when 'CI' { return 'Commercial Insurance Company'; }
+            when 'DS' { return 'Disability'; }
+            when 'FI' { return 'Federal Employees Program (FEP)'; }
+            when 'HM' { return 'Health Maintenance Organization Medicare Risk'; }
+            when 'LM' { return 'Liability Medical'; }
+            when 'MA' { return 'Medicare Part A'; }
+            when 'MB' { return 'Medicare Part B'; }
+            when 'MC' { return 'Medicaid'; }
+            when 'OF' { return 'Other Federal Program'; }
+            when 'TV' { return 'Title V'; }
+            when 'VA' { return 'Veterans Affairs Plan'; }
             when else { return ''; }
         }
     }
