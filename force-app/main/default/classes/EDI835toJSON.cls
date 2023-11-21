@@ -550,9 +550,9 @@ public class EDI835toJSON {
                                         gen.writeObjectField('adjustmentAmt',segmentDataSize > 3 ? segmentData[l][3] : '');
                                         gen.writeObjectField('adjustmentQuantity',segmentDataSize > 4 ? segmentData[l][4] : '');
                                         gen.writeObjectField('additionaladjustmentGroupCode', segmentDataSize > 5 ? segmentData[l][5] : '');
-                                        gen.writeObjectField('claimAdjustmentGroupCodeText',segmentDataSize > 5 ? EDI835DataMappings.getAdjustmentGroupCode(segmentData[l][5]): '');
+                                        gen.writeObjectField('additionalAdjustmentGroupCodeText',segmentDataSize > 5 ? EDI835DataMappings.getAdjustmentGroupCode(segmentData[l][5]): '');
                                         gen.writeObjectField('additionaladjustmentCodeReason',segmentDataSize > 6 ? segmentData[l][6] : '');
-                                        gen.writeObjectField('adjustmentCodeReasonText', segmentDataSize > 6? EDI835DataMappings.getAdjustmentReason(segmentData[l][6]):'');
+                                        gen.writeObjectField('additionaladjustmentCodeReasonText', segmentDataSize > 6? EDI835DataMappings.getAdjustmentReason(segmentData[l][6]):'');
                                         gen.writeObjectField('additionaladjustmentQuantity',segmentDataSize > 7 ? segmentData[l][7] : '');
                                         gen.writeEndObject(); 
                                     }

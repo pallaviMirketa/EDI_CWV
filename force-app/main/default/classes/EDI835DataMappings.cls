@@ -204,7 +204,7 @@ public class EDI835DataMappings {
             when '2U' { return 'Medicare Claim Number'; }
             when '3H' { return 'Patients Medicaid Number'; }
             when '4A' { return 'Hospitals Internal Billing Number'; }
-            when '6R' { return 'Shippers Identification Number'; }
+            when '6R' { return 'Shipper\'s Identification Number'; }
             when '7R' { return 'Carriers Pro Number'; }
             when '9A' { return 'Repriced Claim Number'; }
             when 'AA' { return 'American Bankers Association (ABA) Routing Number'; }
@@ -327,15 +327,15 @@ public class EDI835DataMappings {
     }
     public static String getClaimStatusDescription(String value) {
         switch on value {
-            when '01' { return 'Paid in full'; }
-            when '02' { return 'Denied'; }
-            when '03' { return 'Partially paid'; }
-            when '04' { return 'Duplicate'; }
-            when '05' { return 'Exceeds policy limits'; }
-            when '06' { return 'Benefits exhausted'; }
-            when '07' { return 'Not covered'; }
-            when '08' { return 'Requires further review'; }
-            when '09' { return 'Pending'; }
+            when '1' { return 'Paid in full'; }
+            when '2' { return 'Denied'; }
+            when '3' { return 'Partially paid'; }
+            when '4' { return 'Duplicate'; }
+            when '5' { return 'Exceeds policy limits'; }
+            when '6' { return 'Benefits exhausted'; }
+            when '7' { return 'Not covered'; }
+            when '8' { return 'Requires further review'; }
+            when '9' { return 'Pending'; }
             when '10' { return 'Referenced to another plan'; }
             when '11' { return 'Investigative denial'; }
             when '12' { return 'Payment pending review'; }
@@ -683,7 +683,7 @@ public class EDI835DataMappings {
             when 'AU' { return 'Author'; }
             when 'AZ' { return 'Additional Contact Name'; }
             when 'BE' { return 'Beneficiary'; }
-            when 'BL' { return 'Shippers Contact'; }
+            when 'BL' { return 'Shipper\'s Contact'; }
             when 'BR' { return 'Brokers Contact or Buyer'; }
             when 'BS' { return 'Buying Group Staff'; }
             when 'BU' { return 'Backup Contact'; }
