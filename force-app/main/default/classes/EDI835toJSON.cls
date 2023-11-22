@@ -70,7 +70,11 @@ public class EDI835toJSON {
                 segmentDataSize = segmentData[i].size();
                 gen.writeFieldName('st');
                 gen.writeStartObject();
+<<<<<<< HEAD
                 gen.writeObjectField('TransactionSetIdentifierCode', segmentDataSize > 1 ?  segmentData[i][1] : '');
+=======
+                gen.writeObjectField('applicationSendersCode', segmentDataSize > 1 ?  segmentData[i][1] : '');
+>>>>>>> 06f3bbb7aac3d1174b83c5533ac92b3992b04e21
                 gen.writeObjectField('transactionSetControlNumber', segmentDataSize > 1 ? segmentData[i][2] : '');
                 gen.writeEndObject();
             }
