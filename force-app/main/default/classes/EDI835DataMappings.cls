@@ -354,14 +354,20 @@ public class EDI835DataMappings {
             when else { return ''; }
         }
     }
-    public static String getAdjustmentGroupCode(String strAdjustGroupCode){
+    public static String getCASandMOAGroupCode(String strAdjustGroupCode){
         switch on strAdjustGroupCode  {
             when 'CO' { return 'Contractual Obligations'; }
             when 'CR' { return 'Corrections and Reversals'; }
             when 'OA' { return 'Other Adjustments'; }
             when 'PI' { return 'Payer Initiated Reductions'; }
             when 'PR' { return 'Patient Responsibility'; }
-            when 'ZZ' { return 'Mutually Defined'; }
+            when 'A0' { return 'Medicare Primary, No MSP Record'; }
+            when 'A1' { return 'Medicare Primary, MSP Adjudicated'; }
+            when 'A2' { return 'Medicare Primary, MSP Billed'; }
+            when 'A3' { return 'Medicare Primary, MSP Paid'; }
+            when 'MA01' { return 'Medicare Secondary Adjustment'; }
+            when 'MB' { return 'Medicare Blood Deductible'; }
+            when 'MC' { return 'Medicare Lifetime Reserve'; }
             when else { return ''; }
         }
     }

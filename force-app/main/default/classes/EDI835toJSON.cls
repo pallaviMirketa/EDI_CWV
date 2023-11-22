@@ -48,6 +48,7 @@ public class EDI835toJSON {
                 gen.writeObjectField('acknowledgementRequested',segmentDataSize > 14 ? segmentData[i][14] : '');
                 gen.writeObjectField('acknowledgementRequestedText',segmentDataSize > 14 ? EDI835DataMappings.getackRequestedText(segmentData[i][14]) : '');
                 gen.writeObjectField('usageIndicator',segmentDataSize > 15 ? segmentData[i][15] : '');
+                gen.writeObjectField('componentElementSeparator',segmentDataSize > 16 ? segmentData[i][16] : '');
             }
             if(segmentData[i][0].equals('GS')){
                 segmentDataSize = segmentData[i].size();
@@ -398,13 +399,13 @@ public class EDI835toJSON {
                         gen.writeObjectField('reimbursementRate', segmentDataSize > 1 ? segmentData[j][1] : '');
                         gen.writeObjectField('HCPCSPayableAmount', segmentDataSize > 2 ? segmentData[j][2] : '');
                         gen.writeObjectField('claimPaymentRemarkCode1', segmentDataSize > 3 ? segmentData[j][3] : '');
-                        gen.writeObjectField('claimPaymentRemarkCode1Text', segmentDataSize > 3 ? EDI835DataMappings.getFormatText(segmentData[j][3]) : '');
+                        gen.writeObjectField('claimPaymentRemarkCode1Text', segmentDataSize > 3 ? EDI835DataMappings.getCASandMOAGroupCode(segmentData[j][3]) : '');
                         gen.writeObjectField('claimPaymentRemarkCode2', segmentDataSize > 4 ? segmentData[j][4] : '');
-                        gen.writeObjectField('claimPaymentRemarkCode2Text', segmentDataSize > 4 ? EDI835DataMappings.getFormatText(segmentData[j][4]) : '');
+                        gen.writeObjectField('claimPaymentRemarkCode2Text', segmentDataSize > 4 ? EDI835DataMappings.getCASandMOAGroupCode(segmentData[j][4]) : '');
                         gen.writeObjectField('claimPaymentRemarkCode3', segmentDataSize > 5 ? segmentData[j][5] : '');
-                        gen.writeObjectField('claimPaymentRemarkCode3Text', segmentDataSize > 5 ? EDI835DataMappings.getFormatText(segmentData[j][5]) : '');
+                        gen.writeObjectField('claimPaymentRemarkCode3Text', segmentDataSize > 5 ? EDI835DataMappings.getCASandMOAGroupCode(segmentData[j][5]) : '');
                         gen.writeObjectField('claimPaymentRemarkCode4', segmentDataSize > 6 ? segmentData[j][6] : '');
-                        gen.writeObjectField('claimPaymentRemarkCode4Text', segmentDataSize > 6 ? EDI835DataMappings.getFormatText(segmentData[j][6]) : '');
+                        gen.writeObjectField('claimPaymentRemarkCode4Text', segmentDataSize > 6 ? EDI835DataMappings.getCASandMOAGroupCode(segmentData[j][6]) : '');
                         gen.writeObjectField('monetaryAmount', segmentDataSize > 7 ? segmentData[j][7] : '');
                         gen.writeEndObject();  
                     }
@@ -544,13 +545,13 @@ public class EDI835toJSON {
                                         segmentDataSize = segmentData[l].size();
                                         gen.writeStartObject();
                                         gen.writeObjectField('claimAdjustmentGroupCode',segmentDataSize > 1 ? segmentData[l][1] : '');
-                                        gen.writeObjectField('claimAdjustmentGroupCodeText',segmentDataSize > 1 ? EDI835DataMappings.getAdjustmentGroupCode(segmentData[l][1]): '');
+                                        gen.writeObjectField('claimAdjustmentGroupCodeText',segmentDataSize > 1 ? EDI835DataMappings.getCASandMOAGroupCode(segmentData[l][1]): '');
                                         gen.writeObjectField('adjustmentCodeReason',segmentDataSize > 2 ? segmentData[l][2] : '');
                                         gen.writeObjectField('adjustmentCodeReasonText', segmentDataSize > 2 ? EDI835DataMappings.getAdjustmentReason(segmentData[l][2]):'');
                                         gen.writeObjectField('adjustmentAmt',segmentDataSize > 3 ? segmentData[l][3] : '');
                                         gen.writeObjectField('adjustmentQuantity',segmentDataSize > 4 ? segmentData[l][4] : '');
                                         gen.writeObjectField('additionaladjustmentGroupCode', segmentDataSize > 5 ? segmentData[l][5] : '');
-                                        gen.writeObjectField('additionalAdjustmentGroupCodeText',segmentDataSize > 5 ? EDI835DataMappings.getAdjustmentGroupCode(segmentData[l][5]): '');
+                                        gen.writeObjectField('additionalAdjustmentGroupCodeText',segmentDataSize > 5 ? EDI835DataMappings.getCASandMOAGroupCode(segmentData[l][5]): '');
                                         gen.writeObjectField('additionaladjustmentCodeReason',segmentDataSize > 6 ? segmentData[l][6] : '');
                                         gen.writeObjectField('additionaladjustmentCodeReasonText', segmentDataSize > 6? EDI835DataMappings.getAdjustmentReason(segmentData[l][6]):'');
                                         gen.writeObjectField('additionaladjustmentQuantity',segmentDataSize > 7 ? segmentData[l][7] : '');
