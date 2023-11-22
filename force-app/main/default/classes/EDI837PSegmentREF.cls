@@ -3,7 +3,7 @@ public class EDI837PSegmentREF {
         try{
             String REF = 'REF';
             REF += '*' + EDIDataMappings.referenceIdQualifierREF;
-            REF += '*' + (objCMS1500.ElixirSuite__Federal_Tax_Id_Number__c).replace('-','');
+            REF += '*' + EDIDataUtils.analyze((objCMS1500.ElixirSuite__Federal_Tax_Id_Number__c).replace('-',''),50);
             REF += '~';
             
             return REF + '\n';

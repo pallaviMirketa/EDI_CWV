@@ -41,7 +41,9 @@
 		<members>EDI837PSendEmailBatchTest</members>
 		<members>EDI837PGSSegment</members>
 		<members>EDI837PGSSegmentTest</members>
-		
+		<members>EDI835toJSONTest</members>
+		<members>EDI999toJSON</members>
+		<members>EDI835toJSON</members>
 		<name>ApexClass</name>
 	</types>
 	<version>58.0</version>

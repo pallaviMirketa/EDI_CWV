@@ -3,8 +3,8 @@ public class EDI837PSegmentDMG {
         try{
             String DMG = 'DMG';
             DMG += '*' + EDIDataMappings.dateTimePeriodFormatQualifier;
-            DMG += '*' + EDIDataUtils.analyze(EDIDataUtils.getDateTimeFormat(objClaim.ElixirSuite__Insured_DOB__c));
-            DMG += '*' + EDIDataUtils.analyze(objClaim.ElixirSuite__Insured_Sex__c);
+            DMG += '*' + EDIDataUtils.analyze(EDIDataUtils.getDateTimeFormat(objClaim.ElixirSuite__Insured_DOB__c),35);
+            DMG += '*' + EDIDataUtils.analyze(objClaim.ElixirSuite__Insured_Sex__c,1);
             DMG += '~';
             return DMG + '\n';
         }

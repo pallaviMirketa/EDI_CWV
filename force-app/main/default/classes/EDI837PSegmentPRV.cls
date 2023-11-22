@@ -4,7 +4,7 @@ public class EDI837PSegmentPRV {
             String PRV = 'PRV';
             PRV += '*' + EDIDataMappings.providerCode;
             PRV += '*' + EDIDataMappings.referenceIdentificationQualifier;
-            PRV += '*' + EDIDataUtils.analyze(objProvider.ElixirSuite__Provider_Taxonomy__c);
+            PRV += '*' + EDIDataUtils.analyze(objProvider.ElixirSuite__Provider_Taxonomy__c, 50);
             PRV += '~' ;
             return PRV + '\n';
         }

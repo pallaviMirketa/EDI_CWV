@@ -143,7 +143,7 @@ public class EDI837PSendEmailBatchTest {
             );
             insert testClaim;
             EDI_Recipient_Emails__c email = new EDI_Recipient_Emails__c(
-            	Recipient_Email_Ids__c = 'pallavi.verma@mirketa.com'
+                Recipient_Email_Ids__c = 'pallavi.verma@mirketa.com'
             );
             insert email;
             

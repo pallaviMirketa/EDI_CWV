@@ -5,6 +5,8 @@ public class EDI837PHandler {
         ElixirSuite__Provider__c objProvider = EDIDataUtils.getProviderInfo();
         ElixirSuite__CMS_1500_Claim_Generation__c objProviderMetaData = EDIDataUtils.getBillingProviderData();
         Map<String,String> NM1N3N4Data = EDI837PSegmentNM1N3N4.generateNM1N3N4Segment(objOrgData, objProviderMetaData, claimList[0]);
+        System.debug('NM1N3N4Data:'+ NM1N3N4Data);
+         System.debug('NM1N3N4Data_82:'+ NM1N3N4Data.get('82'));
         String EDI837P = '';
         try{
             //Generate ISA,GS,ST and BHT segments before loop.
@@ -31,8 +33,8 @@ public class EDI837PHandler {
                 EDI837P += NM1N3N4Data.get('PR');
                 EDI837P += EDI837PSegmentCLM.generateCLMSegment(claimData);
                 EDI837P += EDI837PSegmentHI.generateHISegment(claimData);
-                EDI837P += EDI837PSegmentLXSV1DTP.generateLXSV1DTPSegment(claimData);
                 EDI837P += NM1N3N4Data.get('82');
+                EDI837P += EDI837PSegmentLXSV1DTP.generateLXSV1DTPSegment(claimData);
                 
                 NM1N3N4Data.clear();
             }
@@ -41,9 +43,6 @@ public class EDI837PHandler {
             
             EDI837P += EDI837PSegmentSE.generatSESegment(segmentCount);
             EDI837P += EDI837PSegmentGEIEA.genrateGEAndIEASegments();
-            ElixirSuite__Exception_Log__c objExp = new ElixirSuite__Exception_Log__c();
-            objExp.ElixirSuite__Stack_Trace_Long__c = EDI837P;
-            Insert objExp;
             return EDI837P;
             
         } catch (Exception e) { 

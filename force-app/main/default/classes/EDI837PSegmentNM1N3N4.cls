@@ -4,15 +4,29 @@ public class EDI837PSegmentNM1N3N4 {
         Map<String,String> NM1N3N4Data = new Map<String,String>();
         try{
             //Submitter - only NM1 Segment
-            String NM1Submitter = EDI837PSegmentNM1N3N4.generateNM1Segment('41','2',objOrg.Name,'','','','','46','75225');// 6 Parameters for NM1 Segment
+            
+            String NM1Submitter = EDI837PSegmentNM1N3N4.generateNM1Segment(EDIDataMappings.submitterEntityIdentifierCode,
+                                                                           EDIDataMappings.submitterEntityTypeQualifier,
+                                                                           objOrg.Name,'','','','',
+                                                                           EDIDataMappings.submitterIdentificationCodeQualifier,
+                                                                           EDIDataMappings.submitterIdentifier);
             NM1N3N4Data.put('41', NM1Submitter );
             
             //Receiver - only NM1 Segment
-            String NM1Receiver = EDI837PSegmentNM1N3N4.generateNM1Segment('40','2','DCMHRS','','','','','46','100000');
+            String NM1Receiver = EDI837PSegmentNM1N3N4.generateNM1Segment(EDIDataMappings.recieverEntityIdentifierCode,
+                                                                          EDIDataMappings.recieverEntityTypeQualifier,
+                                                                          EDIDataMappings.recieverName,'','','','',
+                                                                          EDIDataMappings.recieverIdentificationCodeQualifier,
+                                                                          EDIDataMappings.recieverPrimaryIdentifier);
             NM1N3N4Data.put('40', NM1Receiver );
             
             //Billing Provider -NM1, N3, N4 Segments
-            String NM1BillingProvider = EDI837PSegmentNM1N3N4.generateNM1Segment('85','2',objOrg.Name,'','','','','XX',objClaim1500.ElixirSuite__Billing_Provider_NPI__c);
+            String NM1BillingProvider = EDI837PSegmentNM1N3N4.generateNM1Segment(EDIDataMappings.billingProviderEntityIdentifierCode,
+                                                                                 EDIDataMappings.billingProviderEntityTypeQualifier,
+                                                                                 objOrg.Name,'','','','',
+                                                                                 EDIDataMappings.billingProviderIdentificationCodeQualifier,
+                                                                                 objClaim1500.ElixirSuite__Billing_Provider_NPI__c);
+            
             String N3BillingProvider = EDI837PSegmentNM1N3N4.generateN3Segment(objClaim1500.ElixirSuite__Billing_Provider_Address__c);
             String N4BillingProvider = EDI837PSegmentNM1N3N4.generateN4Segment(objClaim1500.ElixirSuite__Billing_Provider_City__c, 
                                                                                objClaim1500.ElixirSuite__Billing_Provider_State__c,
@@ -22,9 +36,14 @@ public class EDI837PSegmentNM1N3N4 {
             System.debug('Provider : ' + NM1N3N4Data.get('85'));
             
             //Subscriber Details
-            String NM1Subscriber = EDI837PSegmentNM1N3N4.generateNM1Segment('IL','1',objClaim.ElixirSuite__VOB_lookup__r.ElixirSuite__Insured_Last_Name__c,
-                                                                                objClaim.ElixirSuite__VOB_lookup__r.ElixirSuite__Insured_First_name__c, '',
-                                                                                '','','MI','999999999');//SSN
+            System.debug('lastname '+objClaim.ElixirSuite__VOB_lookup__r.ElixirSuite__Insured_Last_Name__c);
+            String NM1Subscriber = EDI837PSegmentNM1N3N4.generateNM1Segment(EDIDataMappings.subscriberEntityIdentifierCode,
+                                                                            EDIDataMappings.subscriberEntityTypeQualifier,
+                                                                            objClaim.ElixirSuite__VOB_lookup__r.ElixirSuite__Insured_Last_Name__c,
+                                                                            objClaim.ElixirSuite__VOB_lookup__r.ElixirSuite__Insured_First_name__c, '',
+                                                                            '','',
+                                                                            EDIDataMappings.subscriberIdentificationCodeQualifier,
+                                                                            EDIDataMappings.subscriberPrimaryIdentifier);//SSN
             String N3Subscriber = '';
             String N4Subscriber = '';
             if(objClaim.ElixirSuite__VOB_lookup__r.ElixirSuite__Insured_Address__c != null){
@@ -38,12 +57,17 @@ public class EDI837PSegmentNM1N3N4 {
             NM1N3N4Data.put('IL', (NM1Subscriber + N3Subscriber + N4Subscriber));
             
             //Payor Details
-            String NM1Payor = EDI837PSegmentNM1N3N4.generateNM1Segment('PR','2','DCMHRS','','','','','PI',objClaim.ElixirSuite__Payor__r.ElixirSuite__Payer_Code__c);
+            String NM1Payor = EDI837PSegmentNM1N3N4.generateNM1Segment(EDIDataMappings.payorEntityIdentifierCode,
+                                                                       EDIDataMappings.payorEntityTypeQualifier,
+                                                                       EDIDataMappings.payorName,
+                                                                       '','','','',
+                                                                       EDIDataMappings.payorIdentificationCodeQualifier,
+                                                                       objClaim.ElixirSuite__Payor__r.ElixirSuite__Payer_Code__c);
             NM1N3N4Data.put('PR', NM1Payor );
             
             //Rendering Provider Details
               String NM1RenderingProvider = '';
-              String RenderingProviderName = EDIDataUtils.analyze(objClaim.Rendering_Provider_First__c) + ' ' + EDIDataUtils.analyze(objClaim.Rendering_Provider_Last__c);
+              String RenderingProviderName = EDIDataUtils.analyze(objClaim.Rendering_Provider_First__c, 35) + ' ' + EDIDataUtils.analyze(objClaim.Rendering_Provider_Last__c, 60);
             if(objClaim.Rendering_Provider_First__c != null && objClaim.Rendering_Provider_Last__c != null){
                NM1RenderingProvider = EDI837PSegmentNM1N3N4.generateNM1Segment('82','1',RenderingProviderName.trim(),
                                                                                        '','' ,'','','XX',
@@ -67,28 +91,28 @@ public class EDI837PSegmentNM1N3N4 {
         String NM1 = 'NM1';
         NM1 += '*' + IDCode; //101- Entity Identifier
         NM1 += '*' + typeQualifier; //102- Entity Type Qualifier
-        NM1 += '*' + EDIDataUtils.analyze(lastName); //103- Organization Name or Last Name
-        NM1 += '*' + EDIDataUtils.analyze(firstName); //first name - 104
-        NM1 += '*' + EDIDataUtils.analyze(middleName); //middle name -105
-        NM1 += '*' + EDIDataUtils.analyze(prefix); //prefix- 106
-        NM1 += '*' + EDIDataUtils.analyze(suffix); //suffix- 107
-        NM1 += '*' + EDIDataUtils.analyze(codeQualifier); //108- Identification Code Qualifier
-        NM1 += '*' + EDIDataUtils.analyze(submitterId); // 109- Submitter Identifier 
+        NM1 += '*' + EDIDataUtils.analyze(lastName, 60); //103- Organization Name or Last Name
+        NM1 += '*' + EDIDataUtils.analyze(firstName, 35); //first name - 104
+        NM1 += '*' + EDIDataUtils.analyze(middleName, 25); //middle name -105
+        NM1 += '*' + EDIDataUtils.analyze(prefix, 10); //prefix- 106
+        NM1 += '*' + EDIDataUtils.analyze(suffix, 10); //suffix- 107
+        NM1 += '*' + EDIDataUtils.analyze(codeQualifier, 2); //108- Identification Code Qualifier
+        NM1 += '*' + EDIDataUtils.analyze(submitterId, 80); // 109- Submitter Identifier 
         NM1 += '~';
         
         return NM1 + '\n';
     }
     public static String generateN3Segment(String address1){
         String N3 = 'N3';
-        N3 += '*' + EDIDataUtils.analyze(address1);
+        N3 += '*' + EDIDataUtils.analyze(address1, 55);
         N3 += '~';
         return N3 + '\n';
     }
     public static String generateN4Segment(String City, String State, String Zipcode){
         String N4 = 'N4';
-        N4 += '*' +  EDIDataUtils.analyze(City);
-        N4 += '*' +  EDIDataUtils.analyze(State);
-        N4 += '*' +  EDIDataUtils.analyze(Zipcode);
+        N4 += '*' +  EDIDataUtils.analyze(City, 30);
+        N4 += '*' +  EDIDataUtils.analyze(State, 2);
+        N4 += '*' +  EDIDataUtils.analyze(Zipcode, 15);
         N4 += '~';
         return N4 + '\n';
     }

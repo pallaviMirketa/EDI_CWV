@@ -11,17 +11,17 @@ public class EDI837PSegmentLXSV1DTP{
                 counter ++;
                 String SV1 = 'SV1';
                 SV1 += '*' + EDIDataMappings.ProductorServiceIDQualifier_01;//101 -1
-                SV1 += ':' + EDIDataUtils.analyze(objClaimlineItem.ElixirSuite__CPT_HCPCS_Code__c); //101 -2
-                if(objClaimlineItem.ElixirSuite__Modifier_1__c != null){ SV1 += ':' + EDIDataUtils.analyze(objClaimlineItem.ElixirSuite__Modifier_1__c); }//101-3
-                if(objClaimlineItem.ElixirSuite__Modifier_2__c != null){ SV1 += ':' + EDIDataUtils.analyze(objClaimlineItem.ElixirSuite__Modifier_2__c); }//101-4
+                SV1 += ':' + EDIDataUtils.analyze(objClaimlineItem.ElixirSuite__CPT_HCPCS_Code__c, 48); //101 -2
+                if(objClaimlineItem.ElixirSuite__Modifier_1__c != null){ SV1 += ':' + EDIDataUtils.analyze(objClaimlineItem.ElixirSuite__Modifier_1__c, 2); }//101-3
+                if(objClaimlineItem.ElixirSuite__Modifier_2__c != null){ SV1 += ':' + EDIDataUtils.analyze(objClaimlineItem.ElixirSuite__Modifier_2__c, 2); }//101-4
                 Decimal procedureCharges = null;
                 if(objClaimlineItem.ElixirSuite__Procedure_Charge__c != null && objClaimlineItem.ElixirSuite__Days_Units__c != null){
                 procedureCharges = (objClaimlineItem.ElixirSuite__Procedure_Charge__c * objClaimlineItem.ElixirSuite__Days_Units__c);
                 }
-                SV1 += '*' + EDIDataUtils.analyze(String.valueOf(procedureCharges)); //102
+                SV1 += '*' + EDIDataUtils.analyze(String.valueOf(procedureCharges), 18); //102
                 SV1 += '*' + EDIDataMappings.UnitorBasisforMeasurementCode_03; //103
-                SV1 += '*' + EDIDataUtils.analyze(String.valueOf(objClaimlineItem.ElixirSuite__Days_Units__c)); //104
-                SV1 += '*' + EDIDataUtils.analyze(String.valueOf(objClaimlineItem.ElixirSuite__Place_of_Service__c)); //105
+                SV1 += '*' + EDIDataUtils.analyze(String.valueOf(objClaimlineItem.ElixirSuite__Days_Units__c), 15); //104
+                SV1 += '*' + EDIDataUtils.analyze(String.valueOf(objClaimlineItem.ElixirSuite__Place_of_Service__c), 2 ); //105
                 SV1 += '*'; //106 - no data
                 SV1 += '*' + EDIDataUtils.getModifiers(objClaimlineItem.ElixirSuite__Diagnosis_Pointer__c); //107
                 SV1 += '*';

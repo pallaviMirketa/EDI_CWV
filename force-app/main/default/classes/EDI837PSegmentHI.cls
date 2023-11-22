@@ -3,14 +3,14 @@ public class EDI837PSegmentHI {
         try{
             String HI = 'HI';
             HI += '*' + EDIDataMappings.CodeListQualifierCode;
-            HI += ':' +  EDIDataUtils.analyze(objClaim.ElixirSuite__Diagnosis_A__c);
-            if( objClaim.ElixirSuite__Diagnosis_B__c != null ){ HI += ':' + objClaim.ElixirSuite__Diagnosis_B__c; }
-            if( objClaim.ElixirSuite__Diagnosis_C__c != null ){ HI += ':' + objClaim.ElixirSuite__Diagnosis_C__c; }
-            if( objClaim.ElixirSuite__Diagnosis_D__c != null ){ HI += ':' + objClaim.ElixirSuite__Diagnosis_D__c; }
-            if( objClaim.ElixirSuite__Diagnosis_E__c != null ){ HI += ':' + objClaim.ElixirSuite__Diagnosis_E__c; }
-            if( objClaim.ElixirSuite__Diagnosis_F__c != null ){ HI += ':' + objClaim.ElixirSuite__Diagnosis_F__c; }
-            if( objClaim.ElixirSuite__Diagnosis_G__c != null ){ HI += ':' + objClaim.ElixirSuite__Diagnosis_G__c; }
-            if( objClaim.ElixirSuite__Diagnosis_H__c != null ){ HI += ':' + objClaim.ElixirSuite__Diagnosis_H__c; }
+            HI += ':' +  EDIDataUtils.analyze(objClaim.ElixirSuite__Diagnosis_A__c, 3);
+            if( objClaim.ElixirSuite__Diagnosis_B__c != null ){ HI += ':' + EDIDataUtils.analyze(objClaim.ElixirSuite__Diagnosis_B__c,3); }
+            if( objClaim.ElixirSuite__Diagnosis_C__c != null ){ HI += ':' + EDIDataUtils.analyze(objClaim.ElixirSuite__Diagnosis_C__c,3); }
+            if( objClaim.ElixirSuite__Diagnosis_D__c != null ){ HI += ':' + EDIDataUtils.analyze(objClaim.ElixirSuite__Diagnosis_D__c,3); }
+            if( objClaim.ElixirSuite__Diagnosis_E__c != null ){ HI += ':' + EDIDataUtils.analyze(objClaim.ElixirSuite__Diagnosis_E__c,3); }
+            if( objClaim.ElixirSuite__Diagnosis_F__c != null ){ HI += ':' + EDIDataUtils.analyze(objClaim.ElixirSuite__Diagnosis_F__c,3); }
+            if( objClaim.ElixirSuite__Diagnosis_G__c != null ){ HI += ':' + EDIDataUtils.analyze(objClaim.ElixirSuite__Diagnosis_G__c,3); }
+            if( objClaim.ElixirSuite__Diagnosis_H__c != null ){ HI += ':' + EDIDataUtils.analyze(objClaim.ElixirSuite__Diagnosis_H__c,3); }
             HI += '~' ;
             
             return HI + '\n';

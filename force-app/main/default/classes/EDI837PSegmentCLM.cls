@@ -3,11 +3,11 @@ public class EDI837PSegmentCLM {
         try{
             List<ElixirSuite__Claim_Line_Items__c> claimLineItem = objClaim.ElixirSuite__Claim_Line_Items__r;
             String CLM = 'CLM';
-            CLM += '*' + objClaim.Name;
-            CLM += '*' + EDIDataUtils.analyze(String.valueOf(objClaim.ElixirSuite__Total_Charge__c));
+            CLM += '*' + EDIDataUtils.analyze(objClaim.Name,38);
+            CLM += '*' + EDIDataUtils.analyze(String.valueOf(objClaim.ElixirSuite__Total_Charge__c),18);
             CLM += '*';
             CLM += '*';
-            CLM += '*' + EDIDataUtils.analyze(String.valueOf(claimLineItem[0].ElixirSuite__Place_of_Service__c));
+            CLM += '*' + EDIDataUtils.analyze(String.valueOf(claimLineItem[0].ElixirSuite__Place_of_Service__c),2);
             CLM += ':' + EDIDataMappings.FacilityCodeQualifier;
             CLM += ':' + EDIDataMappings.ClaimFrequencyTypeCode;
             CLM += '*' + EDIDataMappings.ProviderorSupplierSignatureIndicator;
