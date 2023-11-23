@@ -4,13 +4,12 @@ public class EDI835toJSON {
         //But here we are aiming to convert STRING to Wrapper that will convert into JSON
         //that is quite difficult and lengthly approach
         //So, we are now converting string Directly into JSON ***************************
-        String ediMessage = ediString.replaceAll('~\\n','~');
+        String ediMessage = ediString.replaceAll('~(\\n|\\r\\n|\\r|\\s)+', '~');
         List<String> segmentList = ediMessage.split('~');
         List<List<String>> segmentData= new List<List<String>>();
         Integer count = 0;
         Integer payeeREFCount = 0;
         Integer payerREFCount = 0;
-        Integer dtmCountOfsvc = 0;
         
         Integer segmentDataSize = null;
         
@@ -70,11 +69,7 @@ public class EDI835toJSON {
                 segmentDataSize = segmentData[i].size();
                 gen.writeFieldName('st');
                 gen.writeStartObject();
-<<<<<<< HEAD
-                gen.writeObjectField('TransactionSetIdentifierCode', segmentDataSize > 1 ?  segmentData[i][1] : '');
-=======
                 gen.writeObjectField('applicationSendersCode', segmentDataSize > 1 ?  segmentData[i][1] : '');
->>>>>>> 06f3bbb7aac3d1174b83c5533ac92b3992b04e21
                 gen.writeObjectField('transactionSetControlNumber', segmentDataSize > 1 ? segmentData[i][2] : '');
                 gen.writeEndObject();
             }
@@ -325,6 +320,8 @@ public class EDI835toJSON {
             Integer claimREFcnt = 0;
             Integer claimsDTMcount = 0;
             Integer refSVCCount =0;
+            Integer dtmCountOfsvc = 0;
+            
             if(segmentData[i][0].equals('CLP')  && !duplicateClaims.contains(segmentData[i])){
                 segmentDataSize = segmentData[i].size();
                 duplicateClaims.add(segmentData[i]);
@@ -481,9 +478,12 @@ public class EDI835toJSON {
                         gen.writeFieldName('claimSupplementalInformation');
                         gen.writeStartArray();
                         for(Integer l = j ; l < segmentData.size(); l++){
-                            if(segmentData[l][0].equals('CLP')){
+                            if(segmentData[l][0].equals('SVC') || segmentData[l][0].equals('CLP')){
                                 break;
                             }
+                            /*if(segmentData[l][0].equals('CLP')){
+                                break;
+                            }*/
                             if(segmentData[l][0].equals('AMT')){
                                 segmentDataSize = segmentData[l].size();
                                 gen.writeStartObject();
@@ -520,17 +520,15 @@ public class EDI835toJSON {
                                 gen.writeFieldName('service');
                                 gen.writeStartArray();
                                 for(Integer l = k+1 ; l < segmentData.size(); l++){
-                                    if(segmentData[l][0].equals('SVC') && dtmCountOfsvc == 0){
-                                        dtmCountOfsvc++;
-                                        break;
-                                    }if(segmentData[l][0].equals('CLP')){
-                                        dtmCountOfsvc = 0;
+                                    if(segmentData[l][0].equals('SVC') || segmentData[l][0].equals('CLP')){
                                         break;
                                     }
+                                   /* if( segmentData[l][0].equals('CLP')){//segmentData[l][0].equals('REF') ||
+                                        break;
+                                    }*/
                                     if( segmentData[l][0].equals('DTM')){
                                         
                                         segmentDataSize = segmentData[l].size();
-                                        
                                         gen.writeStartObject();
                                         gen.writeObjectField('dateTimeQualifier',segmentDataSize > 1 ?  segmentData[l][1] : '');
                                         gen.writeObjectField('serviceDate',segmentDataSize > 2 ?  segmentData[l][2] : '');
@@ -566,12 +564,8 @@ public class EDI835toJSON {
                                 gen.writeFieldName('serviceIdentification');
                                 gen.writeStartArray();
                                 for(Integer l=K+1;l<segmentData.size();l++){
-                                    if(segmentData[l][0].equals('SVC') && refSVCCount == 0){
-                                        refSVCCount++;
+                                    if(segmentData[l][0].equals('SVC') || segmentData[l][0].equals('CLP') ){
                                         break; 
-                                    }
-                                    if(segmentData[l][0].equals('CLP')){
-                                        break;
                                     }
                                     if( segmentData[l][0].equals('REF')){
                                         segmentDataSize = segmentData[l].size();
@@ -581,13 +575,14 @@ public class EDI835toJSON {
                                         gen.writeObjectField('referenceIdentification',segmentDataSize > 2 ? segmentData[l][2] : '');
                                         gen.writeEndObject(); 
                                     }
+                                     
                                 }
                                 gen.writeEndArray();
                                 
                                 gen.writeFieldName('amt_ServiceSupplementalAmount');
                                 gen.writeStartArray();
                                 for(Integer l = k+1 ; l < segmentData.size(); l++){
-                                    if(segmentData[l][0].equals('SVC')){
+                                    if(segmentData[l][0].equals('SVC') || segmentData[l][0].equals('CLP')){
                                         break;
                                     }
                                     if(segmentData[l][0].equals('AMT')){

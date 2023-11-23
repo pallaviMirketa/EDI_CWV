@@ -2,24 +2,20 @@ public class EDI835JSONandReconcile{
     @AuraEnabled
     public static void getJSONtoReconcile(Id recordId){
         String combinedData = '';
-        String EDI835JSON = '';
         Data_Staging__c objDataRecord = [SELECT Id, Status__c FROM Data_Staging__c WHERE Id =: recordId ];                                        
         
         //if the status is not equal to 835P EDI Received it will throw an error
-        if (objDataRecord.Status__c == '837P EDI Received' || objDataRecord.Status__c == 'Is Download' ) {
+        if (objDataRecord.Status__c == '837P EDI Received' || objDataRecord.Status__c == 'Is Download' || objDataRecord.Status__c == '835 EDI Processed' ) {
             throw new AuraHandledException('Status should be: 835 EDI Received');    
-        }
-        if (objDataRecord.Status__c == '835 EDI Processed' ) {
-            throw new AuraHandledException('835 EDI already Processed');    
         }
         
         //get the EDI 835 file
-        List<ContentDocumentLink> contentDocumentLink = [SELECT Id, ContentDocumentId, ContentDocument.Title, ContentDocument.FileExtension, ContentDocument.Description, ContentDocument.LatestPublishedVersionId FROM ContentDocumentLink WHERE  LinkedEntityId = :objDataRecord.Id limit 1  ];
+        List<ContentDocumentLink> contentDocumentLink = [SELECT Id, ContentDocumentId, ContentDocument.Title, ContentDocument.FileExtension, ContentDocument.Description, ContentDocument.LatestPublishedVersionId FROM ContentDocumentLink WHERE  LinkedEntityId = :objDataRecord.Id   limit 1  ];
         System.debug('contentDocumentLink '+ contentDocumentLink);
         
         //throw an error if there is no file
         if (contentDocumentLink.isEmpty()) {
-            throw new AuraHandledException('Please upload an EDI_835 File.');    
+            throw new AuraHandledException('Upload an EDI_835 File.');    
         }
         
         ContentDocument contentDocument = [SELECT Id, Title, FileExtension, Description, LatestPublishedVersionId, LatestPublishedVersion.VersionData FROM ContentDocument WHERE Id =: contentDocumentLink[0].ContentDocumentId];
@@ -36,14 +32,8 @@ public class EDI835JSONandReconcile{
                 combinedData = data.toString();
             }
         }
-        try {
-        EDI835JSON = EDI835toJSON.parseEDItoJSON(combinedData);
-        }
-        catch(exception e){
-            ElixirSuite__Exception_Log__c objExp = new ElixirSuite__Exception_Log__c();
-            objExp.ElixirSuite__Stack_Trace_Long__c = 'Error in EDI_837P JSON Creation:'+ e.getMessage();
-            Insert objExp;
-        }        
+        
+        String EDI835JSON = EDI835toJSON.parseEDItoJSON(combinedData);
         ContentVersion cv = new ContentVersion();
         cv.Title = 'EDI_835_JSON_File_' + DateTime.Now().format('dd-MMM-yy HH:mm:ss');
         cv.PathOnClient = cv.Title + '.txt';

@@ -199,6 +199,7 @@ public class EDI835DataMappings {
     }
     public static String getREFInfo(String referenceCode) {
         switch on referenceCode {
+            when 'PQ' { return 'Payer Identification'; }
             when '1K' { return 'Agriculture Department Loan Number'; }
             when '1S' { return 'Case Number'; }
             when '2U' { return 'Medicare Claim Number'; }
