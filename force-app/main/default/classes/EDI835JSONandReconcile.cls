@@ -2,7 +2,8 @@ public class EDI835JSONandReconcile{
     @AuraEnabled
     public static void getJSONtoReconcile(Id recordId){
         String combinedData = '';
-        Data_Staging__c objDataRecord = [SELECT Id, Status__c FROM Data_Staging__c WHERE Id =: recordId ];                                        
+        String EDI835JSON = '';
+        Data_Staging__c objDataRecord = [SELECT Id, Name, Status__c FROM Data_Staging__c WHERE Id =: recordId ];                                        
         
         //if the status is not equal to 835P EDI Received it will throw an error
         if (objDataRecord.Status__c == '837P EDI Received' || objDataRecord.Status__c == 'Is Download' || objDataRecord.Status__c == '835 EDI Processed' ) {
@@ -11,18 +12,16 @@ public class EDI835JSONandReconcile{
         
         //get the EDI 835 file
         List<ContentDocumentLink> contentDocumentLink = [SELECT Id, ContentDocumentId, ContentDocument.Title, ContentDocument.FileExtension, ContentDocument.Description, ContentDocument.LatestPublishedVersionId FROM ContentDocumentLink WHERE  LinkedEntityId = :objDataRecord.Id   limit 1  ];
-        System.debug('contentDocumentLink '+ contentDocumentLink);
         
-        //throw an error if there is no file
         if (contentDocumentLink.isEmpty()) {
             throw new AuraHandledException('Upload an EDI_835 File.');    
         }
         
         ContentDocument contentDocument = [SELECT Id, Title, FileExtension, Description, LatestPublishedVersionId, LatestPublishedVersion.VersionData FROM ContentDocument WHERE Id =: contentDocumentLink[0].ContentDocumentId];
         ContentVersion contentVersion = [SELECT Id, Title,VersionData FROM ContentVersion WHERE ContentDocumentId = :contentDocument.Id];
-        
-        if (!contentVersion.Title.startsWith('EDI_835')) {
-            throw new AuraHandledException('File name should start with EDI_835');    
+
+         if (!contentVersion.Title.startsWith('era')) {
+            throw new AuraHandledException('File name should start with era');    
         }
         
         List<Blob> fileDataList = new List<Blob>();
@@ -32,10 +31,21 @@ public class EDI835JSONandReconcile{
                 combinedData = data.toString();
             }
         }
-        
-        String EDI835JSON = EDI835toJSON.parseEDItoJSON(combinedData);
+    //   try{
+            EDI835JSON = EDI835toJSON.parseEDItoJSON(combinedData);
+     /*   }catch(exception e){
+            ElixirSuite__Exception_Log__c objExp = new ElixirSuite__Exception_Log__c();
+            objExp.ElixirSuite__Stack_Trace_Long__c = 'Error in formation of JSON:'+ e.getMessage();
+            Insert objExp;
+        }*/
         ContentVersion cv = new ContentVersion();
-        cv.Title = 'EDI_835_JSON_File_' + DateTime.Now().format('dd-MMM-yy HH:mm:ss');
+        String fileName = contentVersion.Title;
+        
+        if (contentVersion.Title.length() > 255) {
+            fileName = contentVersion.Title.substring(0, 255);
+        }
+        
+        cv.Title = fileName + '_EDI835_' + objDataRecord.Name + '_' + DateTime.Now().format('ddMMMyyyy');
         cv.PathOnClient = cv.Title + '.txt';
         cv.VersionData = Blob.valueOf(EDI835JSON);
         insert cv;

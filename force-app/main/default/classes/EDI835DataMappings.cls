@@ -16,6 +16,14 @@ public class EDI835DataMappings {
             when else { return ''; }
         }
     }
+    public static String getISAUsageIndicatorText(String usageIndctr) {
+        switch on usageIndctr {
+            when 'P' {return 'Production'; }
+            when 'T' { return 'Testing'; }
+            when 'U' { return 'Informational or Educational'; }
+            when else { return ''; }
+        }
+    }
     public static String getGSSegmentCodes(String codeText) {
         switch on codeText {
             when 'BE' { return 'Benefit Enrollment'; }
@@ -33,6 +41,8 @@ public class EDI835DataMappings {
     }
     public static String getNM1SegmentCodes(String value) {
         switch on value {
+            when '1' { return 'Person'; }
+            when '2' { return 'Non-Person Entity'; }
             when '34' { return 'Social Security Number'; }
             when 'MI' { return 'Member Identification Number'; }
             when 'II' { return 'Employers Identification Number (EIN)'; }
@@ -45,7 +55,7 @@ public class EDI835DataMappings {
             when 'ZH' { return 'Unique Physician Identification Number (UPIN)'; }
             when 'PQ' { return 'Payer Identification'; }
             when 'QC' { return 'Patient'; }
-            when '82' { return 'Insured'; }
+            when '82' { return 'Other Non Person Entity'; }
             when '74' { return 'Corrected Patient or Insured'; }
             when 'PR' { return 'Payor'; }
             when 'PE' { return 'Payee'; }
