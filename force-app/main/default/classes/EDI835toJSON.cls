@@ -534,7 +534,7 @@ public class EDI835toJSON {
                                 gen.writeObjectField('modifier3', parts.size()> 4? parts[4] : '');
                                 gen.writeObjectField('modifier4', parts.size()> 5? parts[5] : '');
                                 gen.writeObjectField('serviceChargeAmt',segmentDataSize > 2 ? segmentData[k][2] : '');
-                                gen.writeObjectField('providerPymentAmt',segmentDataSize > 3 ? segmentData[k][3] : '');
+                                gen.writeObjectField('providerPaymentAmt',segmentDataSize > 3 ? segmentData[k][3] : '');
                                 gen.writeObjectField('revenueCode',segmentDataSize > 4 ? segmentData[k][4] : '');
                                 gen.writeObjectField('quantity',segmentDataSize > 5 ? segmentData[k][5] : '');
                                 gen.writeFieldName('compositeMedicalProcedureIdentifier');
@@ -601,7 +601,6 @@ break;
                                         break; 
                                     }
                                     if( segmentData[l][0].equals('REF')){
-                                        System.debug('REF in SVC '+segmentData[l][0]);
                                         segmentDataSize = segmentData[l].size();
                                         gen.writeStartObject();
                                         gen.writeObjectField('referenceIdentificationQualifier',segmentDataSize > 1 ? segmentData[l][1] : '');
@@ -665,7 +664,6 @@ break;
         //****footer segments****//
         for (List<String> segment : lastFiveLines) {
             if (segment[0].equals('SE')) {
-                System.debug('inside SE');
                 segmentDataSize = segment.size();
                 gen.writeFieldName('se');
                 gen.writeStartObject();

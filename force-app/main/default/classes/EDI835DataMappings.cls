@@ -210,6 +210,7 @@ public class EDI835DataMappings {
     public static String getREFInfo(String referenceCode) {
         switch on referenceCode {
             when 'PQ' { return 'Payer Identification'; }
+            when '1L' { return 'Referenced By'; }
             when '1K' { return 'Agriculture Department Loan Number'; }
             when '1S' { return 'Case Number'; }
             when '2U' { return 'Medicare Claim Number'; }
@@ -226,6 +227,7 @@ public class EDI835DataMappings {
             when 'BT' { return 'Bank Transit Number'; }
             when 'CA' { return 'Cancelled Purchase Order Number'; }
             when 'CD' { return 'Certificate of Deposit (CD) Number'; }
+            when 'CE' { return 'Certification Identifier'; }
             when 'CK' { return 'Check Number'; }
             when 'CN' { return 'Contract Number'; }
             when 'CO' { return 'Credit Card Number'; }
@@ -284,7 +286,7 @@ public class EDI835DataMappings {
             when 'PV' { return 'Provider Number'; }
             when 'PY' { return 'Payer Number'; }
             when 'R3' { return 'Real Estate Contract Number'; }
-            when 'RA' { return 'Receiving Advice'; }
+            when 'RA' { return 'Reference Number'; }
             when 'RB' { return 'Requisition Number'; }
             when 'RN' { return 'Registered Nurse (RN) License Number'; }
             when 'RR' { return 'Routing Number'; }

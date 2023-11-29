@@ -1,9 +1,10 @@
 public class EDI999toJSON {
-    public static String parseEDItoJSON(String ediString) {
-        String ediMessage = ediString.replaceAll('~\\n','~');
+    public static String parseEDI999toJSON(String ediString) {
+        String ediMessage = ediString.replaceAll('~(\\n|\\r\\n|\\r|\\s)+', '~');
         List<String> segmentList = ediMessage.split('~');
         List<List<String>> segmentData= new List<List<String>>();
         Integer segmentDataSize = null;
+        Integer ak2SegmentCount = 0;
         JSONGenerator gen = JSON.createGenerator(true);
         
         for(string str: segmentList){
@@ -40,6 +41,7 @@ public class EDI999toJSON {
                 gen.writeObjectField('acknowledgementRequested',segmentDataSize > 14 ? segmentData[i][14] : '');
                 gen.writeObjectField('acknowledgementRequestedText',segmentDataSize > 14 ? EDI835DataMappings.getackRequestedText(segmentData[i][14]) : '');
                 gen.writeObjectField('usageIndicator',segmentDataSize > 15 ? segmentData[i][15] : '');
+                gen.writeObjectField('usageIndicatorText',segmentDataSize > 15 ? EDI835DataMappings.getISAUsageIndicatorText(segmentData[i][15]) : '');
                 gen.writeObjectField('componentElementSeparator',segmentDataSize > 16 ? segmentData[i][16] : '');
                 
             }
@@ -66,7 +68,7 @@ public class EDI999toJSON {
                 gen.writeStartObject();
                 gen.writeObjectField('applicationSendersCode', segmentDataSize > 1 ?  segmentData[i][1] : '');
                 gen.writeObjectField('transactionSetControlNumber', segmentDataSize > 2 ? segmentData[i][2] : '');
-                 gen.writeObjectField('implementationConventionPreference', segmentDataSize > 3 ? segmentData[i][3] : '');
+                gen.writeObjectField('implementationConventionPreference', segmentDataSize > 3 ? segmentData[i][3] : '');
                 gen.writeEndObject();
             }
             if(segmentData[i][0].equals('AK1')){
@@ -80,6 +82,62 @@ public class EDI999toJSON {
                 gen.writeEndObject();
             }
             
+            if(segmentData[i][0].equals('AK2') && ak2SegmentCount == 0){
+                gen.writeFieldName('ak2');
+                gen.writeStartArray(); 
+                for(Integer j=0;j <segmentData.size();j++){
+                    if(segmentData[j][0].equals('AK2')){
+                        segmentDataSize = segmentData[j].size();
+                        gen.writeStartObject();
+                        gen.writeObjectField('transactionSetIdentifierCode', segmentDataSize > 1 ?  segmentData[j][1] : '');
+                        gen.writeObjectField('transactionSetControlNumber', segmentDataSize > 2 ?  segmentData[j][2] : '');
+                        gen.writeObjectField('implementationConventionReference', segmentDataSize > 3 ? segmentData[j][3] : '');
+                        gen.writeObjectField('implementationConventionReferenceText', segmentDataSize > 3 ? EDI999DataMappings.getAcknowledgementCode(segmentData[j][3]) : '');
+                        gen.writeObjectField('implementationConventionReference2', segmentDataSize > 4 ? segmentData[j][4] : '');
+                        gen.writeObjectField('implementationConventionReference2Text', segmentDataSize > 4 ? EDI999DataMappings.getAcknowledgementCode(segmentData[j][4]) : '');
+                        gen.writeObjectField('version', segmentDataSize > 5 ?  segmentData[j][5] : '');
+                        gen.writeEndObject();
+                    }
+                }
+                gen.writeEndArray();
+                ak2SegmentCount++;
+            }
+            if(segmentData[i][0].equals('AK9')){
+                segmentDataSize = segmentData[i].size();
+                gen.writeFieldName('ak9');
+                gen.writeStartObject();
+                gen.writeObjectField('functionalGroupAcknowledgeCode', segmentDataSize > 1 ?  segmentData[i][1] : '');
+                gen.writeObjectField('functionalGroupAcknowledgeCodeText', segmentDataSize > 1 ?  EDI999DataMappings.getAcknowledgementCode(segmentData[i][1]) : '');
+                gen.writeObjectField('numberofTransactionSetsIncluded', segmentDataSize > 2 ? segmentData[i][2] : '');
+                gen.writeObjectField('numberofReceivedTransactionSets', segmentDataSize > 3 ? segmentData[i][3] : '');
+                gen.writeObjectField('numberofAcceptedTransactionSets', segmentDataSize > 4 ? segmentData[i][4] : '');
+                gen.writeEndObject();
+            }
+            if(segmentData[i][0].equals('SE')){
+                segmentDataSize = segmentData[i].size();
+                gen.writeFieldName('se');
+                gen.writeStartObject();
+                gen.writeObjectField('numberofIncludedSegments', segmentDataSize > 1 ? segmentData[i][1] : '');
+                gen.writeObjectField('transactionSetControlNumber', segmentDataSize > 2 ? segmentData[i][2] : '');
+                gen.writeEndObject();
+            }
+            if(segmentData[i][0].equals('GE')){
+                segmentDataSize = segmentData[i].size();
+                gen.writeFieldName('getrailers');
+                gen.writeStartObject();
+                gen.writeObjectField('numberOfIncludedSets', segmentDataSize > 1 ? segmentData[i][1] : '');
+                gen.writeObjectField('groupControlNumber', segmentDataSize > 2 ? segmentData[i][2] : '');
+                gen.writeEndObject();
+            }
+            if(segmentData[i][0].equals('IEA')){
+                segmentDataSize = segmentData[i].size();
+                gen.writeFieldName('ieatrailers');
+                gen.writeStartObject();
+                gen.writeObjectField('numberOfIncludedGroups', segmentDataSize > 1 ? segmentData[i][1] : '');
+                gen.writeObjectField('interchangeControlNumber', segmentDataSize > 2 ? segmentData[i][2] : '');
+                gen.writeEndObject();
+            }
+            
         }
         gen.writeEndObject();
         gen.writeEndArray();
@@ -89,9 +147,10 @@ public class EDI999toJSON {
         //------------comment exception log later
         
         String jsonData = gen.getAsString();
-        /*ElixirSuite__Exception_Log__c objExp = new ElixirSuite__Exception_Log__c();
+        System.debug(jsonData);
+        ElixirSuite__Exception_Log__c objExp = new ElixirSuite__Exception_Log__c();
         objExp.ElixirSuite__Stack_Trace_Long__c =jsonData;
-        Insert objExp;*/
+        Insert objExp;
         return jsonData;
         
     }
