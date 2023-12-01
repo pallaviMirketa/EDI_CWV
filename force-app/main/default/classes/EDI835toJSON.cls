@@ -496,7 +496,7 @@ public class EDI835toJSON {
                         gen.writeEndArray();
                     }
                     if(segmentData[j][0].equals('AMT')){
-                        gen.writeFieldName('claimSupplementalInformation');
+                        gen.writeFieldName('claimSupplementalInfo');
                         gen.writeStartArray();
                         for(Integer l = j ; l < segmentData.size(); l++){
                             if(segmentData[l][0].equals('SVC') || segmentData[l][0].equals('CLP')){
@@ -612,7 +612,7 @@ break;
                                 }
                                 gen.writeEndArray();
                                 
-                                gen.writeFieldName('amt_ServiceSupplementalAmount');
+                                gen.writeFieldName('serviceSupplementalInfo');//amt_ServiceSupplementalAmount
                                 gen.writeStartArray();
                                 for(Integer l = k+1 ; l < segmentData.size(); l++){
                                     if(segmentData[l][0].equals('SVC') || segmentData[l][0].equals('CLP')){
@@ -623,7 +623,7 @@ break;
                                         gen.writeStartObject();
                                         gen.writeObjectField('amountQualifierCode',segmentDataSize > 1 ?  segmentData[l][1] : '');
                                         gen.writeObjectField('amountQualifierCodeText', segmentDataSize > 1 ? EDI835DataMappings.getAmountText(segmentData[l][1]) : '');
-                                        gen.writeObjectField('amount',segmentDataSize > 2 ?  segmentData[l][2] : '');
+                                        gen.writeObjectField('serviceLineAllowedAmt',segmentDataSize > 2 ?  segmentData[l][2] : '');//amount
                                         gen.writeEndObject();
                                     }
                                 }

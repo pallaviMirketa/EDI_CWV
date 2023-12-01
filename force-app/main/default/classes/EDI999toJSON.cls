@@ -91,11 +91,7 @@ public class EDI999toJSON {
                         gen.writeStartObject();
                         gen.writeObjectField('transactionSetIdentifierCode', segmentDataSize > 1 ?  segmentData[j][1] : '');
                         gen.writeObjectField('transactionSetControlNumber', segmentDataSize > 2 ?  segmentData[j][2] : '');
-                        gen.writeObjectField('implementationConventionReference', segmentDataSize > 3 ? segmentData[j][3] : '');
-                        gen.writeObjectField('implementationConventionReferenceText', segmentDataSize > 3 ? EDI999DataMappings.getAcknowledgementCode(segmentData[j][3]) : '');
-                        gen.writeObjectField('implementationConventionReference2', segmentDataSize > 4 ? segmentData[j][4] : '');
-                        gen.writeObjectField('implementationConventionReference2Text', segmentDataSize > 4 ? EDI999DataMappings.getAcknowledgementCode(segmentData[j][4]) : '');
-                        gen.writeObjectField('version', segmentDataSize > 5 ?  segmentData[j][5] : '');
+                        gen.writeObjectField('version', segmentDataSize > 3 ?  segmentData[j][3] : '');
                         gen.writeEndObject();
                     }
                 }

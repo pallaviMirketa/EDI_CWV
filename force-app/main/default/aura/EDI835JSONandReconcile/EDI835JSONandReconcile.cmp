@@ -1,4 +1,4 @@
-<aura:component controller="EDI835JSONandReconcile" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickActionWithoutHeader" access="global" >
+<aura:component controller="EDIParser" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickActionWithoutHeader" access="global" >
     <aura:attribute name="recordId" type="Id" /> 
     <aura:attribute name="showSpinner" type="Boolean" default="false"/>
     <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
