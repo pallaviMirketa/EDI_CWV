@@ -381,6 +381,82 @@ public class EDI835DataMappings {
             when 'MA01' { return 'Medicare Secondary Adjustment'; }
             when 'MB' { return 'Medicare Blood Deductible'; }
             when 'MC' { return 'Medicare Lifetime Reserve'; }
+            when '01' { return 'Deductible has been met.'; }
+            when '02' { return 'Coinsurance has been met.'; }
+            when '03' { return 'Maximum benefit has been reached.'; }
+            when '04' { return 'Pre-certification or authorization requirement not met.'; }
+            when '05' { return 'Service or supply not covered by the plan.'; }
+            when '06' { return 'Frequency of service limitation exceeded.'; }
+            when '07' { return 'Service or supply not medically necessary.'; }
+            when '08' { return 'Claim not submitted timely.'; }
+            when '09' { return 'Duplicate claim.'; }
+            when '10' { return 'Services or supplies not provided.'; }
+            when '104' { return 'Contractual Adjustment.'; }
+            when '11' { return 'Patient is not eligible for benefits.'; }
+            when '12' { return 'Amount exceeds plan limits.'; }
+            when '13' { return 'Service not rendered to patient.'; }
+            when '14' { return 'Not a covered dependent.'; }
+            when '141' { return 'Non-Covered Service or Item.'; }
+            when '15' { return 'Provider not participating in plan.'; }
+            when '16' { return 'Services or supplies provided outside of plan\'s service area.'; }
+            when '17' { return 'Services or supplies not performed by a qualified provider.'; }
+            when '18' { return 'Wrong procedure code.'; }
+            when '19' { return 'Missing or invalid information.'; }
+            when '20' { return 'Other reason.'; }
+            when '253' { return 'Withhold Adjustment.'; }
+            when '258' { return 'COB Adjustment - Other Payer.'; }
+            when '267' { return 'MSP Crossover Adjustment - Conditional Payment.'; }
+            when '273' { return 'Coverage/program guidelines exceeded.'; }
+            when 'A4' { return 'COB: Payer not responsible for payment.'; }
+            when 'A5' { return 'COB: Payer responsible for secondary payment.'; }
+            when 'A6' { return 'COB: Payer responsible for tertiary payment.'; }
+            when 'A8' { return 'COB Adjustment - Secondary Payer.'; }
+            when 'B1' { return 'Non-covered dependent.'; }
+            when 'B10' { return 'Coverage terminated prior to service date.'; }
+            when 'B11' { return 'Coverage not in effect for this service.'; }
+            when 'B12' { return 'Prior authorization required but not obtained.'; }
+            when 'B13' { return 'Service already paid for.'; }
+            when 'B14' { return 'Service not authorized by plan.'; }
+            when 'B15' { return 'Service not provided by qualified provider.'; }
+            when 'B16' { return 'Service provided outside of plan\'s service area.'; }
+            when 'B17' { return 'Service not medically necessary.'; }
+            when 'B18' { return 'Service not covered at this level of care.'; }
+            when 'B19' { return 'Service not covered for this patient\'s condition.'; }
+            when 'B2' { return 'Not eligible for services.'; }
+            when 'B20' { return 'Service not covered for this patient\'s age.'; }
+            when 'B21' { return 'Service not covered for this patient\'s gender.'; }
+            when 'B22' { return 'Service not covered for this patient\'s date of service.'; }
+            when 'B23' { return 'Service not covered for this patient\'s frequency of service.'; }
+            when 'B24' { return 'Service not covered for this patient\'s place of service.'; }
+            when 'B25' { return 'Service not covered for this patient\'s type of provider.'; }
+            when 'B3' { return 'Not eligible for benefits.'; }
+            when 'B4' { return 'Terminated benefits.'; }
+            when 'B5' { return 'Not employed by covered employer.'; }
+            when 'B6' { return 'Not covered spouse.'; }
+            when 'B7' { return 'Not covered child.'; }
+            when 'B8' { return 'Not covered by this plan.'; }
+            when 'B9' { return 'Coverage not in effect.'; }
+            when 'C1' { return 'Claim not submitted timely.'; }
+            when 'C2' { return 'Duplicate claim.'; }
+            when 'C3' { return 'Missing or incomplete information.'; }
+            when 'C4' { return 'Invalid information.'; }
+            when 'C5' { return 'Services not provided.'; }
+            when 'C6' { return 'Other reason.'; }
+            when 'D1' { return 'Incorrect provider information.'; }
+            when 'D2' { return 'Incorrect patient information.'; }
+            when 'D3' { return 'Incorrect service information.'; }
+            when 'D4' { return 'Incorrect date of service.'; }
+            when 'D5' { return 'Incorrect charge or amount.'; }
+            when 'D6' { return 'Other reason.'; }
+            when 'E1' { return 'Coordination of benefits (COB) required but not performed.'; }
+            when 'E2' { return 'COB: Incorrect primary payer information.'; }
+            when 'E3' { return 'COB: Incorrect secondary payer information.'; }
+            when 'E4' { return 'COB: Incorrect tertiary payer information.'; }
+            when 'E5' { return 'COB: Primary payer not identified.'; }
+            when 'E6' { return 'COB: Secondary payer not identified.'; }
+            when 'E7' { return 'COB: Tertiary payer not identified.'; }
+            when 'E8' { return 'COB: Incorrect payer information.'; }
+            when 'E9' { return 'Other reason.'; }
             when else { return ''; }
         }
     }
@@ -487,31 +563,76 @@ public class EDI835DataMappings {
             when else { return ''; }
         }
     }
-    public static String getFormatText(String strFormatIndentifier){
+    public static String getFormatText(String strFormatIndentifier)
+    {
         switch on strFormatIndentifier  {
-            when 'N782' { return 'The beneficiary deductible and coinsurance amounts have been combined'; }
-            when 'N479' { return 'Claim Payment Adjustment Remark'; }
-            when 'N480' { return 'Explanation of Benefits Remark - Coordination of Benefits'; }
-            when 'N481' { return 'Remittance Advice Remark - Provider Payment'; }
-            when 'N482' { return 'Explanation of Benefits Remark - Provider Adjustment'; }
-            when 'N483' { return 'Remittance Advice Remark - Provider Withholding'; }
-            when 'N484' { return 'Explanation of Benefits Remark - Patient Responsibility'; }
-            when 'N485' { return 'Remittance Advice Remark - Patient Payment'; }
-            when 'N486' { return 'Explanation of Benefits Remark - Other'; }
-            when 'N487' { return 'Remittance Advice Remark - Other'; }
-            when 'N488' { return 'Explanation of Benefits Remark - Coordination of Benefits - Medicare Secondary Payer'; }
-            when 'N489' { return 'Remittance Advice Remark - Coordination of Benefits - Medicare Secondary Payer'; }
-            when 'N490' { return 'Explanation of Benefits Remark - No Payment Due - Coordination of Benefits'; }
+            when 'A1' { return 'Claim is pending review for possible coordination of benefits (COB).'; }
+            when 'A2' { return 'Payer is awaiting additional information from the primary payer before processing the claim.'; }
+            when 'A3' { return 'Payer has identified a potential COB issue and is requesting additional information from the provider.'; }
+            when 'A4' { return 'Payer is awaiting information from the secondary payer before processing the claim.'; }
+            when 'A5' { return 'Payer has identified a potential COB issue and is requesting additional information from the secondary payer.'; }
+            when 'A6' { return 'Payer is awaiting information from the tertiary payer before processing the claim.'; }
+            when 'A7' { return 'Payer has identified a potential COB issue and is requesting additional information from the tertiary payer.'; }
+            when 'B1' { return 'Payer has identified a potential duplicate claim and is investigating.'; }
+            when 'B2' { return 'Payer is awaiting additional information from the provider to resolve a duplicate claim issue.'; }
+            when 'B3' { return 'Duplicate claim has been denied.'; }
+            when 'C1' { return 'Payer is awaiting additional information from the provider to complete the claim.'; }
+            when 'C2' { return 'Payer has identified missing or incomplete information on the claim and is requesting additional information from the provider.'; }
+            when 'C3' { return 'Claim has been denied due to missing or incomplete information.'; }
+            when 'D1' { return 'Payer has identified an error in the provider information on the claim and is requesting a correction.'; }
+            when 'D2' { return 'Payer has identified an error in the patient information on the claim and is requesting a correction.'; }
+            when 'D3' { return 'Payer has identified an error in the service information on the claim and is requesting a correction.'; }
+            when 'D4' { return 'Payer has identified an error in the date of service on the claim and is requesting a correction.'; }
+            when 'D5' { return 'Payer has identified an error in the charge or amount on the claim and is requesting a correction.'; }
+            when 'D6' { return 'Other error in claim information.'; }
+            when 'E1' { return 'Payer has identified a potential exclusion for the service or supply on the claim and is investigating.'; }
+            when 'E2' { return 'Payer is awaiting additional information from the provider to determine if the service or supply is covered.'; }
+            when 'E3' { return 'Service or supply has been denied due to an exclusion.'; }
+            when 'F1' { return 'Payer has identified a potential pre-authorization requirement for the service or supply on the claim and is investigating.'; }
+            when 'F2' { return 'Payer is awaiting additional information from the provider to determine if pre-authorization is required.'; }
+            when 'F3' { return 'Pre-authorization is required for the service or supply and has not been obtained.'; }
+            when 'F4' { return 'Pre-authorization has been denied.'; }
+            when 'G1' { return 'Payer has identified a potential non-covered service or supply on the claim and is investigating.'; }
+            when 'G2' { return 'Payer is awaiting additional information from the provider to determine if the service or supply is covered.'; }
+            when 'G3' { return 'Service or supply has been denied because it is not covered by the plan.'; }
+            when 'H1' { return 'Payer has identified a potential frequency of service limitation for the service or supply on the claim and is investigating.'; }
+            when 'H2' { return 'Payer is awaiting additional information from the provider to determine if the frequency of service limitation has been exceeded.'; }
+            when 'H3' { return 'Frequency of service limitation has been exceeded.'; }
+            when 'I1' { return 'Payer has identified a potential medical necessity issue for the service or supply on the claim and is investigating.'; }
+            when 'I2' { return 'Payer is awaiting additional information from the provider to determine if the service or supply is medically necessary.'; }
+            when 'I3' { return 'Service or supply has been denied because it is not medically necessary.'; }
+            when 'J1' { return 'Payer has identified a potential other reason for denying the claim and is investigating.'; }
+            when 'J2' { return 'Payer is awaiting additional information from the provider to determine the reason for denying the claim.'; }
+            when 'J3' { return 'Claim has been denied for other reasons.'; }
+            when 'M86' { return 'Service denied because payment already made for same/similar procedure within set time frame.'; }
+            when 'N111' { return 'Claim being held pending additional information from the provider.'; }
+            when 'N13' { return 'Claim is being held pending a review of the patient\'s coordination of benefits (COB).'; }
+            when 'N130' { return 'Claim being held pending a review of the patient\'s eligibility for the specific services or supplies provided.'; }
+            when 'N209' { return 'Claim is being held pending a review of the provider\'s eligibility to participate in the plan.'; }
+            when 'N435' { return 'Claim is being held pending a review of the patient\'s prior authorization.'; }
+            when 'N479' { return 'Claim Payment Adjustment Remark.'; }
+            when 'N480' { return 'Explanation of Benefits Remark - Coordination of Benefits.'; }
+            when 'N481' { return 'Remittance Advice Remark - Provider Payment.'; }
+            when 'N482' { return 'Explanation of Benefits Remark - Provider Adjustment.'; }
+            when 'N483' { return 'Remittance Advice Remark - Provider Withholding.'; }
+            when 'N484' { return 'Explanation of Benefits Remark - Patient Responsibility.'; }
+            when 'N485' { return 'Remittance Advice Remark - Patient Payment.'; }
+            when 'N486' { return 'Explanation of Benefits Remark - Other.'; }
+            when 'N487' { return 'Remittance Advice Remark - Other.'; }
+            when 'N488' { return 'Explanation of Benefits Remark - Coordination of Benefits - Medicare Secondary Payer.'; }
+            when 'N489' { return 'Remittance Advice Remark - Coordination of Benefits - Medicare Secondary Payer.'; }
+            when 'N490' { return 'Explanation of Benefits Remark - No Payment Due - Coordination of Benefits.'; }
             when 'N491' { return 'Remittance Advice Remark - No Payment Due - Coordination of Benefits'; }
-            when 'N492' { return 'Explanation of Benefits Remark - Claim Denied'; }
-            when 'N493' { return 'Remittance Advice Remark - Claim Denied'; }
-            when 'N494' { return 'Explanation of Benefits Remark - Claim Referred to Other Payer'; }
-            when 'N495' { return 'Remittance Advice Remark - Claim Referred to Other Payer'; }
-            when 'N496' { return 'Explanation of Benefits Remark - Claim Held for Further Information'; }
-            when 'N497' { return 'Remittance Advice Remark - Claim Held for Further Information'; }
-            when 'N498' { return 'Explanation of Benefits Remark - Claim Pending'; }
-            when 'N499' { return 'Remittance Advice Remark - Claim Pending'; }
-            when 'ZZ' { return 'Mutually Defined'; }
+			when 'N492' { return 'Explanation of Benefits Remark - Claim Denied.'; }
+            when 'N493' { return 'Remittance Advice Remark - Claim Denied.'; }
+            when 'N494' { return 'Explanation of Benefits Remark - Claim Referred to Other Payer.'; }
+            when 'N495' { return 'Remittance Advice Remark - Claim Referred to Other Payer.'; }
+            when 'N496' { return 'Explanation of Benefits Remark - Claim Held for Further Information.'; }
+            when 'N497' { return 'Remittance Advice Remark - Claim Held for Further Information.'; }
+            when 'N498' { return 'Explanation of Benefits Remark - Claim Pending.'; }
+            when 'N499' { return 'Remittance Advice Remark - Claim Pending.'; }
+            when 'N95' { return 'Claim being held pending a review of the patient\'s eligibility.'; }
+            when 'ZZ' { return 'Mutually Defined.'; }
             when else { return ''; }
         }
     }
