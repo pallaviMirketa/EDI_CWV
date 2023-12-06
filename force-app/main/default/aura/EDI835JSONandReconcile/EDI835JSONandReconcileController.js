@@ -17,8 +17,7 @@
                 }
             }
             else{
-                 //console.log('Reconcilation part');
-                var toastMessage = 'EDI 835 Reconcilation failed';
+                var toastMessage = '';
                 var errors = response.getError();
                 if (errors && errors[0] && errors[0].message) {
                     toastMessage = errors[0].message;

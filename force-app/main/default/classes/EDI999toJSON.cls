@@ -4,7 +4,9 @@ public class EDI999toJSON {
         List<String> segmentList = ediMessage.split('~');
         List<List<String>> segmentData= new List<List<String>>();
         Integer segmentDataSize = null;
-        Integer ak2SegmentCount = 0;
+        Integer ak2index = 0;
+        Integer ak9index = 0;
+        List<List<String>> duplicateAK2 = new List<List<String>>();
         JSONGenerator gen = JSON.createGenerator(true);
         
         for(string str: segmentList){
@@ -81,24 +83,76 @@ public class EDI999toJSON {
                 gen.writeObjectField('versionAndRelease', segmentDataSize > 3 ? segmentData[i][3] : '');
                 gen.writeEndObject();
             }
-            
-            if(segmentData[i][0].equals('AK2') && ak2SegmentCount == 0){
-                gen.writeFieldName('ak2');
-                gen.writeStartArray(); 
-                for(Integer j=0;j <segmentData.size();j++){
-                    if(segmentData[j][0].equals('AK2')){
+            if(segmentData[i][0].equals('AK2')) { ak2index = i; break; }
+        }
+        //-----------------------------------------------------------------------AK2 Segment starts
+        gen.writeFieldName('ak2');
+        gen.writeStartArray();// AK2 array starts
+        for(Integer i = ak2index ;i < segmentData.size() ;i++){
+           Integer flag = 0;
+            if(segmentData[i][0].equals('AK2') && !duplicateAK2.contains(segmentData[i]) ){
+                
+                gen.writeStartObject();// AK2 object starts
+                segmentDataSize = segmentData[i].size();
+                duplicateAK2.add(segmentData[i]);
+                gen.writeObjectField('transactionSetIdentifierCode', segmentDataSize > 1 ?  segmentData[i][1] : '');
+                gen.writeObjectField('transactionSetControlNumber', segmentDataSize > 2 ?  segmentData[i][2] : '');
+                gen.writeObjectField('version', segmentDataSize > 3 ?  segmentData[i][3] : '');
+                for( Integer j = i + 1 ; j< segmentData.size();j++){
+                    if(segmentData[j][0].equals('AK2')  && !duplicateAK2.contains(segmentData[j])){  break; }
+                    if(segmentData[j][0].equals('AK9')) { ak9index = i; break; }
+                    
+                    if(segmentData[j][0].equals('IK3') && flag == 0){
+                        System.debug('Inside IK3 ouside condition');
+                        gen.writeFieldName('errors');
+                        gen.writeStartArray();//error Array Starts
+                        
+                        for(Integer k = j ; k < segmentData.size(); k++){
+                            
+                            if(segmentData[k][0].equals('AK2')){  break;   }
+                            if((segmentData[k][0].equals('IK5')) || (segmentData[k][0].equals('AK9'))){  break; }
+                            
+                            if(segmentData[k][0].equals('IK3')){
+                                flag++;
+                                gen.writeStartObject();// Error Object Starts
+                                segmentDataSize = segmentData[k].size();
+                                gen.writeObjectField('IK3_segmentCode', segmentDataSize > 1 ?  segmentData[k][1] : '');
+                                gen.writeObjectField('IK3_segmentCodeText', segmentDataSize > 1 ?  EDI999DataMappings.getIK3SegmentDescription(segmentData[k][1]) : '');
+                                gen.writeObjectField('IK3_segmentLinePosition', segmentDataSize > 2 ?  segmentData[k][2] : '');
+                                gen.writeObjectField('IK3_loopCode', segmentDataSize > 3 ?  segmentData[k][3] : '');
+                                gen.writeObjectField('IK3_segmentErrorCode', segmentDataSize > 4 ?  segmentData[k][4] : '');
+                                gen.writeObjectField('IK3_segmentErrorCodeText', segmentDataSize > 4 ?  EDI999DataMappings.getErrorMessage( segmentData[k][4]) : '');//Data Map
+                                
+                                if(segmentData[k+1][0].equals('IK4')){
+                                    System.debug('Inside IK4');
+                                    segmentDataSize = segmentData[k].size();
+                                    gen.writeObjectField('IK4_fieldPositionInSegment', segmentDataSize > 1 ?  segmentData[k+1][1] : '');
+                                    gen.writeObjectField('IK4_fieldDataElementRef', segmentDataSize > 2 ?  segmentData[k+1][2] : '');
+                                    gen.writeObjectField('IK4_fieldErrorCode', segmentDataSize > 3 ?  segmentData[k+1][3] : '');
+                                    gen.writeObjectField('IK4_fieldErrorCodeText', segmentDataSize > 4 ?  segmentData[k+1][4] : '');
+                                    
+                                }
+                                gen.writeEndObject();// error Object Starts
+                            }
+                        }
+                        gen.writeEndArray();//error Array ends
+                    }
+                    if(segmentData[j][0].equals('IK5')){
                         segmentDataSize = segmentData[j].size();
-                        gen.writeStartObject();
-                        gen.writeObjectField('transactionSetIdentifierCode', segmentDataSize > 1 ?  segmentData[j][1] : '');
-                        gen.writeObjectField('transactionSetControlNumber', segmentDataSize > 2 ?  segmentData[j][2] : '');
-                        gen.writeObjectField('version', segmentDataSize > 3 ?  segmentData[j][3] : '');
-                        gen.writeEndObject();
+                        gen.writeObjectField('acknowledgementCode', segmentDataSize > 1 ?  segmentData[j][1] : '');
+                        gen.writeObjectField('acknowledgementCodeText', segmentDataSize > 1 ?  EDI999DataMappings.getAcknowledgementCode(segmentData[j][1]) : '');
                     }
                 }
-                gen.writeEndArray();
-                ak2SegmentCount++;
+                gen.writeEndObject(); // AK2 object ends
             }
+        }
+        gen.writeEndArray();//AK2 array ends here
+        //---------------------------------------------------------------------------AK2 Loop Ends
+        for(Integer i = ak9index ;i < segmentData.size() ;i++){
             if(segmentData[i][0].equals('AK9')){
+                Integer count = 0;
+                count++;
+                
                 segmentDataSize = segmentData[i].size();
                 gen.writeFieldName('ak9');
                 gen.writeStartObject();
@@ -109,6 +163,7 @@ public class EDI999toJSON {
                 gen.writeObjectField('numberofAcceptedTransactionSets', segmentDataSize > 4 ? segmentData[i][4] : '');
                 gen.writeEndObject();
             }
+            
             if(segmentData[i][0].equals('SE')){
                 segmentDataSize = segmentData[i].size();
                 gen.writeFieldName('se');
@@ -133,20 +188,14 @@ public class EDI999toJSON {
                 gen.writeObjectField('interchangeControlNumber', segmentDataSize > 2 ? segmentData[i][2] : '');
                 gen.writeEndObject();
             }
-            
         }
         gen.writeEndObject();
         gen.writeEndArray();
         gen.writeEndObject();
         gen.writeEndArray();
         gen.writeEndObject();
-        //------------comment exception log later
-        
         String jsonData = gen.getAsString();
         System.debug(jsonData);
-        ElixirSuite__Exception_Log__c objExp = new ElixirSuite__Exception_Log__c();
-        objExp.ElixirSuite__Stack_Trace_Long__c =jsonData;
-        Insert objExp;
         return jsonData;
         
     }
