@@ -32,6 +32,7 @@ public class EDIReconcile {
                                                LatestPublishedVersion.VersionData
                                                FROM ContentDocument
                                                WHERE Id =: contentDocumentLink[0].ContentDocumentId];
+           
             
             ContentVersion contentVersion  = [SELECT Id, Title,VersionData
                                               FROM ContentVersion
@@ -46,14 +47,15 @@ public class EDIReconcile {
             }
         }
         
-        if (objDataRecord.EDI_Type__c == '999 EDI'){
+        /*if (objDataRecord.EDI_Type__c == '999 EDI'){
             EDIJSON = EDI999toJSON.parseEDI999toJSON(combinedData);
             EDIType= '_EDI999_';
-        }
-            else if(objDataRecord.EDI_Type__c == '835 EDI'){
+        }*/
+       // else 
+            if(objDataRecord.EDI_Type__c == '835 EDI'){
             EDIJSON = EDI835toJSON.parseEDItoJSON(combinedData);
              
-            EDI835Parsing.PostClaimUpdation(EDIJSON);
+            Json835Response.PostClaimUpdation(EDIJSON);
             objDataRecord.Status__c = '835 EDI Processed';
             update objDataRecord;  
                 

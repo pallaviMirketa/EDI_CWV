@@ -4,7 +4,7 @@ public class EDI835DataMappings {
             when 'ZZ' {return 'Mutually Defined'; }
             when '01' { return 'DUNS (Dun & Bradstreet) Number'; }
             when '02' { return 'SCAC (Standard Carrier Alpha Code)'; }
-            when '08' { return 'UCC EDI Communications ID'; }
+            when '08' { return 'UCC EDI Communicat	ions ID'; }
             when '12' { return 'Phone Number'; }
             when '14' { return 'DUNS+4'; }
             when '20' { return 'Health Industry Number (HIN)'; }

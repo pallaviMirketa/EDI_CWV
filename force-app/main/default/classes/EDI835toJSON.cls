@@ -502,9 +502,6 @@ public class EDI835toJSON {
                             if(segmentData[l][0].equals('SVC') || segmentData[l][0].equals('CLP')){
                                 break;
                             }
-                            /*if(segmentData[l][0].equals('CLP')){
-                             break;
-                            }*/
                             if(segmentData[l][0].equals('AMT')){
                                 segmentDataSize = segmentData[l].size();
                                 gen.writeStartObject();
@@ -556,9 +553,7 @@ public class EDI835toJSON {
                                     if(segmentData[l][0].equals('SVC') || segmentData[l][0].equals('CLP')){
                                         break;
                                     }
-                                    /* if( segmentData[l][0].equals('CLP')){//segmentData[l][0].equals('REF') ||
-break;
-}*/
+                                    
                                     if( segmentData[l][0].equals('DTM')){
                                         
                                         segmentDataSize = segmentData[l].size();
@@ -612,7 +607,7 @@ break;
                                 }
                                 gen.writeEndArray();
                                 
-                                gen.writeFieldName('serviceSupplementalInfo');//amt_ServiceSupplementalAmount
+                                gen.writeFieldName('serviceSupplementalInfo');
                                 gen.writeStartArray();
                                 for(Integer l = k+1 ; l < segmentData.size(); l++){
                                     if(segmentData[l][0].equals('SVC') || segmentData[l][0].equals('CLP')){
