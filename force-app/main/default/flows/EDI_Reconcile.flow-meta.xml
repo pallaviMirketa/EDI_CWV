@@ -23,7 +23,7 @@
     <apiVersion>59.0</apiVersion>
     <environments>Default</environments>
     <interviewLabel>EDI Reconcile {!$Flow.CurrentDateTime}</interviewLabel>
-    <label>&quot;EDI Convertion &amp; Reconciliation Flow&quot;</label>
+    <label>EDI Conversion &amp; Reconciliation</label>
     <processMetadataValues>
         <name>BuilderType</name>
         <value>

@@ -63,7 +63,6 @@ public class Json835Response {
     // Parsing the JSON string and deserialize it into an instance of the Elixir class
     
     public static void PostClaimUpdation(String jsonStr){
-        System.debug('eeee');
         Json835Response response = (Json835Response) JSON.deserialize(jsonStr, Json835Response.class);
         ElixirSuite__ERA_Generation__c eraCS = ElixirSuite__ERA_Generation__c.getInstance();
         Boolean manualERA = eraCS.ElixirSuite__Manual_ERA_Posting_Opted__c==null?false:eraCS.ElixirSuite__Manual_ERA_Posting_Opted__c;
@@ -90,7 +89,6 @@ public class Json835Response {
         insert masterEra;
         Integer serial = 0;
         for (Json835Response.Claim jsonClaim : response.Elixir[0].claims) {
-            System.debug('Claimm '+jsonClaim);
             decimal TotalCharge = 0;
             decimal TotalAmount = 0;
             TotalCharge =  jsonClaim.totalClaimChargeAmount;
@@ -104,36 +102,29 @@ public class Json835Response {
                
                Boolean notFoundControlNumber = false; 
                 for (Json835Response.Service jsonService : jsonClaim.services) {
-                    System.debug('jsonService '+jsonService);
                     String inputString;
                     if(String.isNotBlank(jsonClaim.patientClaimControlNumber) && jsonClaim.patientClaimControlNumber != 'NOT FOUND' && (jsonClaim.patientClaimControlNumber.startsWithIgnoreCase('claim') || jsonClaim.patientClaimControlNumber.startsWithIgnoreCase('cs')) ){
                         notFoundControlNumber = true;
                         if(jsonClaim.patientClaimControlNumber.startsWithIgnoreCase('CLAIM')){
-                            System.debug('111 '+jsonClaim.patientClaimControlNumber);
                             if(jsonClaim.patientClaimControlNumber.contains(orgsId)){
                               inputString = jsonClaim.patientClaimControlNumber.substringBefore(orgsId);
-                              System.debug('inputString 1 '+inputString);
-                            }else{
+                              }else{
                              inputString = jsonClaim.patientClaimControlNumber;
-                             System.debug('inputString 2 '+inputString);
-                            }
+                             }
                             if(inputString.contains('-')){
                                 String firstWord = inputString.substring(0, 5);
                                 String capitalizedFirstWord = firstWord.substring(0, 1).toUpperCase() + firstWord.substring(1).toLowerCase();
                                 outputString = capitalizedFirstWord + '-' + inputString.substring(6);
-                                System.debug('outputString 1 '+outputString);
                                 uniqueKey = outputString + ';' + string.valueOf(serial);
                             }else{
                                 String firstWord = inputString.substring(0, 5);
                                 String capitalizedFirstWord = firstWord.substring(0, 1).toUpperCase() + firstWord.substring(1).toLowerCase();
                                 outputString = capitalizedFirstWord + '-' + inputString.substring(5); 
-                                System.debug('outputString 2 '+outputString);
                                 uniqueKey = outputString + ';' + string.valueOf(serial);
                             }
                         }else{
                             outputString = jsonClaim.patientClaimControlNumber;
-                            System.debug('outputString 3 '+outputString);
-                            uniqueKey = outputString + ';' + string.valueOf(serial);
+                             uniqueKey = outputString + ';' + string.valueOf(serial);
                         }
                        
                         era.ElixirSuite__Total_Charge__c = TotalCharge;
@@ -154,14 +145,12 @@ public class Json835Response {
                         eraLineItem.ElixirSuite__Charge__c = jsonService.serviceChargeAmt;
                         eraLineItem.ElixirSuite__Paid__c = jsonService.providerPaymentAmt;
                         if(jsonService.serviceSupplementalInfo != null){
-                            System.debug('serviceIdentification '+jsonService.serviceSupplementalInfo);
                              for (Json835Response.ServiceSupplementalInfo serviceIdentificationinfo : jsonService.serviceSupplementalInfo) {
                                 eraLineItem.ElixirSuite__Total_Allowed_Amount__c = serviceIdentificationinfo.serviceLineAllowedAmt;
                              }
                         }else{
                           eraLineItem.ElixirSuite__Total_Allowed_Amount__c = 0; 
                         }
-                        System.debug('aaaa ');
                         if(jsonService.service != null){
                             for (Json835Response.ServiceDate service : jsonService.service) {
                                 
@@ -177,7 +166,6 @@ public class Json835Response {
                             }
                       
                         }
-                        System.debug('bbbb ');
                         eraLineItem.ElixirSuite__Proc_code__c = jsonService.serviceCode;
                         
                         Decimal PatRes = 0;
@@ -202,9 +190,7 @@ public class Json835Response {
                         
                         eraLineItem.ElixirSuite__Patient_Responsibility__c = PatRes;
                         if(jsonService.serviceIdentification !=null){
-                            System.debug('serviceIdentification '+jsonService.serviceIdentification);
-                             for (Json835Response.ServiceIdentification serviceIdentification : jsonService.serviceIdentification) {
-                                   System.debug('serviceIdentificationinside for'+serviceIdentification);
+                            for (Json835Response.ServiceIdentification serviceIdentification : jsonService.serviceIdentification) {
                                    System.debug('serviceIdentificationinside '+serviceIdentification.referenceIdentification);
                                 if(serviceIdentification.referenceIdentification!=null && serviceIdentification.referenceIdentification!='' && serviceIdentification.referenceIdentification.startsWithIgnoreCase('cl-')){
                                    
@@ -234,18 +220,15 @@ public class Json835Response {
             if(eraLineExist){
                                     era.ElixirSuite__EOB__c = masterEra.Id;
                                     eraListToInsert.add(era); 
-                                     System.debug('cmmm '+claimVSEras);
-                                    if(claimVSEras == null || (claimVSEras != null && !claimVSEras.containsKey(outputString))){
+                                     if(claimVSEras == null || (claimVSEras != null && !claimVSEras.containsKey(outputString))){
                                         List<String> CmList = new List<String>();
                                         CmList.add(uniqueKey);  
                                         claimVSEras.put(outputString,CmList);
-                                        System.debug('cmmm 2 '+claimVSEras);
-                                    }else{
+                                        }else{
                                         List<String> CmList = claimVSEras.get(outputString); 
                                         CmList.add(uniqueKey);
                                         claimVSEras.put(outputString,CmList);
-                                        System.debug('cmmm 3 '+claimVSEras);
-                                    }
+                                        }
                                     ERAMap.put(outputString,era);
                                     uniqueERAMap.put(uniqueKey,era);
                                  }
@@ -316,16 +299,10 @@ public class Json835Response {
                 ClaimVSPaidAmt.put(ar.ElixirSuite__Claim__c,d); 
             }
         }
-        System.debug('&&& '+ClaimVSPaidAmt); 
          Map<String,ElixirSuite__Claim__c> updatedClaimpList = new  Map<String,ElixirSuite__Claim__c>();
          Map<String,ElixirSuite__Claim_Line_Items__c> updateClineItemList = new  Map<String,ElixirSuite__Claim_Line_Items__c>();
          Map<String,ElixirSuite__Claim__c> updatedERAList = new  Map<String,ElixirSuite__Claim__c>();
-        /*system.debug('Checking--'+ [SELECT Id, Name, ElixirSuite__Claim_Status__c,ElixirSuite__Account__c,ElixirSuite__Posted__c,ElixirSuite__Primary_Paid__c,
-                                         (SELECT Id, ElixirSuite__Claim__c, ElixirSuite__Primary_Paid__c, ElixirSuite__CPT_HCPCS_Code__c, Name,ElixirSuite__Total_Billed__c, 
-                                          ElixirSuite__Procedure__c, ElixirSuite__Total_Allowed_Amount__c, ElixirSuite__ERA_Received__c, ElixirSuite__Total_Adjustment__c, ElixirSuite__Amount_Paid_by_Insurance__c 
-                                          FROM ElixirSuite__Claim_Line_Items__r LIMIT 30000) FROM ElixirSuite__Claim__c Where Name  IN: ERAMap.keyset()]);*/
         for (ElixirSuite__Claim__c cl : clmList) {
-                                              system.debug('cl--'+cl);    
                                               String claimName = cl.Name;
                                               String clId = cl.Id;
                                               Boolean Status = false;
@@ -335,7 +312,6 @@ public class Json835Response {
                                                   //String clN = (key).substringBefore(';');
                                                   ElixirSuite__EOB__c eraRec;
                                                   eraRec  = uniqueERAMap.get(key);
-                                                   System.debug('eraRec '+eraRec);
                                                   Decimal totalAdjstAmt=0;
                                                   eraRec.ElixirSuite__Claim__c = cl.Id;
                                                   eraRec.ElixirSuite__Account__c = cl.ElixirSuite__Account__c;
