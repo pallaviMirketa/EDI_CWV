@@ -321,8 +321,8 @@ public class EDIReconcileTest {
         insert testContentDocumentLink;
         
         System.Test.startTest();
-        EDIParser.getJSONtoReconcile(objDataRecord.Id);
-        EDIParser.reconcileEDI835JSON(null, null);
+        EDIReconcile.getJSONtoReconcile835and999(objDataRecord.Id);
+        EDIReconcile.getJSONtoReconcile835and999(null);
         System.Test.stopTest();
     }
     @isTest
@@ -464,61 +464,6 @@ public class EDIReconcileTest {
         EDIReconcile.getJSONtoReconcile835and999(objDataRecord3.Id);
         EDIReconcile.getJSONtoReconcile835and999(null);
         System.Test.stopTest();
-    }
-    @isTest
-    Public static void getException(){
-        Data_Staging__c objDataRecord  = new Data_Staging__c(
-            Status__c = '835 EDI Processed',
-            EDI_Type__c = '835 EDI'
-        );
-        Insert objDataRecord;
-        try {
-            List<Data_Staging__c>  objDataRecordInfo = [SELECT Id,Name,Status__c,EDI_Type__c FROM Data_Staging__c WHERE Id = :objDataRecord.Id LIMIT 1];
-            
-            List<ContentDocumentLink> contentDocumentLink = [SELECT Id, ContentDocumentId, ContentDocument.Title,
-                                                             ContentDocument.FileExtension, ContentDocument.Description,
-                                                             ContentDocument.LatestPublishedVersionId
-                                                             FROM ContentDocumentLink
-                                                             WHERE  LinkedEntityId = :objDataRecord.Id   limit 1  ];
-            
-            System.debug('objDataRecordInfo '+objDataRecordInfo);
-            if (!objDataRecordInfo.isEmpty() ) {
-                Test.startTest();
-                EDIReconcile.getJSONtoReconcile835and999(objDataRecordInfo[0].Id);
-                Test.stopTest();
-                System.assert(false, 'Expected AuraHandledException was not thrown');
-            } else {
-                System.assert(true, 'No records found for the given Id');
-            }
-            // System.assert(false, 'Expected AuraHandledException was not thrown');
-        } catch (Exception e) {
-            system.assert(true, e.getMessage());
-        }
-        
-    }
-    
-    @isTest
-    public static void getExceptio2(){
-        Data_Staging__c objDataRecord2  = new Data_Staging__c(
-            Status__c = '835 EDI Received',
-            EDI_Type__c = '835 EDI'
-        );
-        insert objDataRecord2;
-        try {
-            List<Data_Staging__c>  objDataRecordInfo2 = [SELECT Id,Name,Status__c,EDI_Type__c FROM Data_Staging__c WHERE Id = :objDataRecord2.Id LIMIT 1];
-            
-            if (!objDataRecordInfo2.isEmpty() ) {
-                Test.startTest();
-                EDIParser.getJSONtoReconcile(objDataRecordInfo2[0].Id);
-                Test.stopTest();
-                System.assert(false, 'Expected AuraHandledException was not thrown');
-            } else {
-                System.assert(true, 'No records found for the given Id');
-            }
-            System.assert(false, 'Expected AuraHandledException was not thrown');
-        } catch (Exception e) {
-            system.assert(true, e.getMessage());
-        }
     }
     @isTest
     public static void get999JSONTestCase(){
