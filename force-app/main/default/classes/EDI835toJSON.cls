@@ -4,8 +4,11 @@ public class EDI835toJSON {
         //But here we are aiming to convert STRING to Wrapper that will convert into JSON
         //that is quite difficult and lengthly approach
         //So, we are now converting string Directly into JSON ***************************
-        String ediMessage = ediString.replaceAll('~(\\n|\\r\\n|\\r|\\s)+', '~');
-        List<String> segmentList = ediMessage.split('~');
+        String ediSeparator = System.label.EDI835Separator;
+        String ediDelimiter = System.label.EDI835Delimiter;
+        String ediModifier = System.label.EDI835Modifier;
+        String ediMessage = ediString.replaceAll( ediDelimiter +'(\\n|\\r\\n|\\r|\\s)+', ediDelimiter);
+        List<String> segmentList = ediMessage.split(ediDelimiter);
         List<List<String>> segmentData= new List<List<String>>();
         
         Integer count = 0;
@@ -16,7 +19,7 @@ public class EDI835toJSON {
         
         JSONGenerator gen = JSON.createGenerator(true);
         for(string str: segmentList){
-            segmentData.add(str.split('\\*'));
+            segmentData.add(str.split('\\'+ ediSeparator));
         }
             
          /******Extracting and storing the last 5 lines of the EDI message, to get SE, GE, and IEA segments.
@@ -523,7 +526,7 @@ public class EDI835toJSON {
                             if(segmentData[k][0].equals('SVC')){
                                 gen.writeStartObject();
                                 segmentDataSize = segmentData[k].size();
-                                String[] parts = segmentData[k][1].split(':');
+                                String[] parts = segmentData[k][1].split('\\'+ ediModifier);
                                 gen.writeObjectField('serviceTypeCode',  parts.size()> 0? parts[0]:'');
                                 gen.writeObjectField('serviceCode', parts.size()> 1 ?  parts[1] : '');
                                 gen.writeObjectField('modifier1', parts.size()> 2? parts[2] : '');
@@ -537,7 +540,7 @@ public class EDI835toJSON {
                                 gen.writeFieldName('compositeMedicalProcedureIdentifier');
                                 gen.writeStartObject();
                                 if( segmentDataSize > 6 && (segmentData[k][6] != '')){
-                                    String[] parts2 = segmentData[k][6].split(':');
+                                    String[] parts2 = segmentData[k][6].split('\\'+ ediModifier);
                                 gen.writeObjectField('serviceTypeCode',parts2.size()> 0 ?  parts2[0]:'');
                                 gen.writeObjectField('serviceCode',parts2.size()> 1 ?  parts2[1] : '');
                                 gen.writeObjectField('modifier1', parts2.size()> 2? parts2[2] : '');

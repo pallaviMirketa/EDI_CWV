@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomLabels xmlns="http://soap.sforce.com/2006/04/metadata">
+    
+    <labels>
+        <fullName>EDI835Delimiter</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>When payer is HSCSN then value is _ else value is ~</shortDescription>
+        <value>_</value>
+    </labels>
+    <labels>
+        <fullName>EDI835Modifier</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>When payer is HSCSN then value is ^ else value is :</shortDescription>
+        <value>^</value>
+    </labels>
+    <labels>
+        <fullName>EDI835Separator</fullName>
+        <language>en_US</language>
+        <protected>false</protected>
+        <shortDescription>When payer is HSCSN then value is ~ else value is *</shortDescription>
+        <value>~</value>
+    </labels>
+    
+</CustomLabels>
