@@ -195,7 +195,6 @@ public class EDI999toJSON {
         gen.writeEndArray();
         gen.writeEndObject();
         String jsonData = gen.getAsString();
-        System.debug(jsonData);
         return jsonData;
         
     }
